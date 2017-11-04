@@ -15,8 +15,16 @@ cabal-version:       >=1.10
 
 executable blog
   main-is:             main.hs
-  hs-source-dirs:      site
+  hs-source-dirs:      hakyll/app
   default-language:    Haskell2010
   ghc-options:         -threaded
   build-depends:       base >= 4.7 && < 5,
-                       hakyll
+                       hakyll,
+                       blog
+
+library
+  ghc-options:         -threaded
+  hs-source-dirs:      hakyll/lib
+  build-depends:       base >= 4.7 && < 5
+                     , hakyll
+  exposed-modules:     BlogRules

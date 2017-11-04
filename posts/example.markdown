@@ -1,5 +1,6 @@
 ---
 title: example post
+date: "2015-08-23"
 ---
 
 Mauris in lorem nisl. Maecenas tempus facilisis ante, eget viverra nisl

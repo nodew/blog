@@ -10,10 +10,11 @@ build-exec:
 		stack build
 
 publish: build
-		cp -r _site/* docs
+		git checkout gh-pages
+		cp -r _site/* ./
 		git add .
 		git commit -m "$(MSG)"
-		git push origin master
+		git push origin gh-pages
 
 clean:
 		stack exec blog clean
