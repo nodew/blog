@@ -1,8 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module BlogRules (
-  matchImages
-, matchJs
-, matchCss
+  matchStatics
 , matchPosts
 , matchTemplates
 , getTags
@@ -14,16 +12,20 @@ module BlogRules (
 , createHomePage
 ) where
 
+import Data.Monoid (mappend)
 import Hakyll hiding (getTags)
 
-imagesGlob :: Pattern
-imagesGlob = fromGlob "images/*"
+-- imagesGlob :: Pattern
+-- imagesGlob = fromGlob "images/*"
 
-jsGlob :: Pattern
-jsGlob = fromGlob "js/*"
+-- jsGlob :: Pattern
+-- jsGlob = fromGlob "js/*"
 
-cssGlob :: Pattern
-cssGlob = fromGlob "css/*"
+-- cssGlob :: Pattern
+-- cssGlob = fromGlob "css/*"
+
+staticGlog :: Pattern
+staticGlog = fromGlob "dist/**"
 
 postsGlob :: Pattern
 postsGlob = fromGlob "posts/**"
@@ -31,21 +33,26 @@ postsGlob = fromGlob "posts/**"
 templatesGlob :: Pattern
 templatesGlob = fromGlob "templates/*"
 
-matchStatic :: Pattern -> Rules ()
-matchStatic glob = match glob $ do
+-- matchStatic :: Pattern -> Rules ()
+-- matchStatic glob = match glob $ do
+--   route $ idRoute
+--   compile copyFileCompiler
+
+matchStatics :: Rules ()
+matchStatics = match staticGlog $ do
   route $ idRoute
   compile copyFileCompiler
 
-matchImages :: Rules ()
-matchImages = matchStatic imagesGlob
+-- matchImages :: Rules ()
+-- matchImages = matchStatic imagesGlob
 
-matchJs :: Rules ()
-matchJs = matchStatic jsGlob
+-- matchJs :: Rules ()
+-- matchJs = matchStatic jsGlob
 
-matchCss :: Rules ()
-matchCss = match cssGlob $ do
-  route $ idRoute
-  compile compressCssCompiler
+-- matchCss :: Rules ()
+-- matchCss = match cssGlob $ do
+--   route $ idRoute
+--   compile compressCssCompiler
 
 matchTemplates :: Rules ()
 matchTemplates = match templatesGlob $ compile templateBodyCompiler

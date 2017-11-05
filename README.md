@@ -1,1 +1,1 @@
-# blog
+# My blog based on Hakyll
