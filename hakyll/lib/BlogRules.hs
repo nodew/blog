@@ -25,7 +25,7 @@ import Hakyll hiding (getTags)
 -- cssGlob = fromGlob "css/*"
 
 staticGlog :: Pattern
-staticGlog = fromGlob "dist/**"
+staticGlog = fromGlob "static_dist/**"
 
 postsGlob :: Pattern
 postsGlob = fromGlob "posts/**"

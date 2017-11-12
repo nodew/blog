@@ -7,9 +7,11 @@ const uglify = require('gulp-uglify');
 const cssmin = require('gulp-minify-css');
 const copy = require('gulp-copy');
 const clean = require('gulp-clean');
+const exec = require('child_process').exec;
+const runSequence = require('run-sequence');
 
 gulp.task('stylus', function () {
-  return gulp.src(['./static/css/test.styl', './static/css/default.css'])
+  return gulp.src(['./static/css/*.styl', './static/css/default.css'])
     .pipe(stylus({
       'include-css': true
     }))
@@ -42,14 +44,20 @@ gulp.task('clean', function() {
     .pipe(clean());
 });
 
-gulp.task('watch:js', ['clean'], function() {
-  return gulp.watch('./static/js/*', ['javascript']);
+gulp.task('watch:js', function() {
+  return gulp.watch('./static/js/**/*', ['javascript']);
 });
 
-gulp.task('watch:stylus', ['clean'], function() {
-  return gulp.watch('./static/css/*', ['stylus']);
+gulp.task('watch:stylus', function() {
+  return gulp.watch('./static/css/**/*', ['stylus']);
 });
 
-gulp.task('watch', ['watch:js', 'watch:stylus'], function() {})
+gulp.task('build', function(callback) {
+  return runSequence(
+    'clean',
+    ['javascript', 'stylus', 'images'],
+    callback
+  );
+});
 
-gulp.task('build', ['clean', 'images', 'stylus', 'javascript'], function() {});
+gulp.task('watch', ['build', 'watch:js', 'watch:stylus'], function() {})
