@@ -99,7 +99,7 @@ buildStaticPages xs = match (fromList identifiers) $ do
       >>= relativizeUrls
   where
     prefix = "pages/"
-    identifiers = map (fromFilePath . (++ prefix)) xs
+    identifiers = map (fromFilePath . ((++) prefix)) xs
 
 createArchives :: Rules ()
 createArchives = create ["archive.html"] $ do
