@@ -31,7 +31,7 @@ postsGlob :: Pattern
 postsGlob = fromGlob "posts/**"
 
 templatesGlob :: Pattern
-templatesGlob = fromGlob "templates/*"
+templatesGlob = fromGlob "templates/**"
 
 -- matchStatic :: Pattern -> Rules ()
 -- matchStatic glob = match glob $ do

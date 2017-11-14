@@ -11,7 +11,7 @@ const exec = require('child_process').exec;
 const runSequence = require('run-sequence');
 
 gulp.task('stylus', function () {
-  return gulp.src(['./static/css/*.styl', './static/css/default.css'])
+  return gulp.src(['./static/css/*.styl'])
     .pipe(stylus({
       'include-css': true
     }))
