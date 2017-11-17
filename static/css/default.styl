@@ -1,16 +1,22 @@
-html,
-body
+@import './normalize.css'
+
+footer-height = 70px
+
+html
   height: 100%
-  min-height: 100%
 
 body
+  min-height: 100%
+  position: relative
+  padding-bottom: footer-height
+  box-sizing: border-box;
   color: black
   font-size: 16px
+  line-height: 1.5
 
 .header
-  border-bottom: 2px solid black
   margin-bottom: 30px
-  padding: 12px 0px 12px 0px
+  padding: 12px 24px
 
   .logo a
     color: black
@@ -21,22 +27,40 @@ body
 
   .navigation
     text-align: right
+    font-size: 14px
+    font-weight: bold
 
   .navigation a
     color: black
-    font-size: 18px
     font-weight: bold
     margin-left: 12px
     text-decoration: none
     text-transform: uppercase
 
+.content
+  padding: 0px 24px 12px
+
 .footer
-  border-top: solid 2px black
-  color: #555
-  font-size: 12px
-  margin-top: 30px
+  position: absolute
+  left: 0
+  bottom: 0
+  width: 100%
+  height: footer-height
+  box-sizing: border-box
+  color: #fff
+  background: #212121
   padding: 12px 0px 12px 0px
-  text-align: right
+  text-align: center
+
+  .copyright
+    font-size: 16px
+
+  .generated
+    font-size: 12px
+
+    a
+      color: #fff
+
 
 h1
   font-size: 24px
