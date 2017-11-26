@@ -1,4 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE Arrows             #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE OverloadedStrings  #-}
+
 module BlogRules (
   matchStatics
 , matchPosts
@@ -10,19 +13,13 @@ module BlogRules (
 , buildStaticPages
 , createArchives
 , createHomePage
+, buildPagination
+, createAtomXML
+, createRSS
 ) where
 
-import Data.Monoid (mappend)
+import Data.Monoid (mappend, (<>))
 import Hakyll hiding (getTags)
-
--- imagesGlob :: Pattern
--- imagesGlob = fromGlob "images/*"
-
--- jsGlob :: Pattern
--- jsGlob = fromGlob "js/*"
-
--- cssGlob :: Pattern
--- cssGlob = fromGlob "css/*"
 
 staticGlog :: Pattern
 staticGlog = fromGlob "static_dist/**"
@@ -33,26 +30,10 @@ postsGlob = fromGlob "posts/**"
 templatesGlob :: Pattern
 templatesGlob = fromGlob "templates/**"
 
--- matchStatic :: Pattern -> Rules ()
--- matchStatic glob = match glob $ do
---   route $ idRoute
---   compile copyFileCompiler
-
 matchStatics :: Rules ()
 matchStatics = match staticGlog $ do
   route $ idRoute
   compile copyFileCompiler
-
--- matchImages :: Rules ()
--- matchImages = matchStatic imagesGlob
-
--- matchJs :: Rules ()
--- matchJs = matchStatic jsGlob
-
--- matchCss :: Rules ()
--- matchCss = match cssGlob $ do
---   route $ idRoute
---   compile compressCssCompiler
 
 matchTemplates :: Rules ()
 matchTemplates = match templatesGlob $ compile templateBodyCompiler
@@ -116,20 +97,59 @@ createArchives = create ["archive.html"] $ do
           >>= loadAndApplyTemplate "templates/default.html" archiveCtx
           >>= relativizeUrls
 
-createHomePage :: Rules ()
-createHomePage = match "pages/index.html" $ do
+createHomePage :: Tags -> Tags -> Rules ()
+createHomePage cats tags = match "pages/index.html" $ do
     route $ gsubRoute "pages/" $ const ""
     compile $ do
         posts <- recentFirst =<< loadAll postsGlob
         let indexCtx =
                 listField "posts" postCtx (return posts) `mappend`
                 constField "title" "Home"                `mappend`
+                field "tags" (\_ -> renderTagList tags) `mappend`
+                field "categories" (\_ -> renderTagList cats) `mappend`
                 defaultContext
 
         getResourceBody
             >>= applyAsTemplate indexCtx
             >>= loadAndApplyTemplate "templates/default.html" indexCtx
             >>= relativizeUrls
+
+buildPagination :: Rules ()
+buildPagination = do
+    pages <- buildPaginateWith
+              (\ids -> sortRecentFirst ids >>= return . paginateEvery 1)
+              postsGlob
+              (\n -> fromCapture "page/*.html" (show n))
+
+    paginateRules pages $ \pageNum pattern -> do
+        route idRoute
+        compile $ do
+          posts <- recentFirst =<< loadAll pattern
+          let paginateCtx = paginateContext pages pageNum
+          let ctx         = constField "title" "Posts"
+                          <> listField "posts" postCtx (return posts)
+                          <> paginateCtx
+                          <> defaultContext
+          makeItem ""
+              >>= loadAndApplyTemplate "templates/posts.html" ctx
+              >>= loadAndApplyTemplate "templates/default.html" ctx
+              >>= relativizeUrls
+
+createAtomXML :: Rules ()
+createAtomXML = create ["atom.xml"] $ do
+  route idRoute
+  compile $ do
+    let feedCtx = postCtx `mappend` bodyField "description"
+    posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsGlob "content"
+    renderAtom feedConfiguration feedCtx posts
+
+createRSS :: Rules ()
+createRSS = create ["rss.xml"] $ do
+  route idRoute
+  compile $ do
+    let feedCtx = postCtx `mappend` bodyField "description"
+    posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsGlob "content"
+    renderRss feedConfiguration feedCtx posts
 
 postCtx :: Context String
 postCtx = mconcat
@@ -145,3 +165,12 @@ postCtxWithTags tags cats = mconcat
     , categoryField "categories" cats
     , postCtx
     ]
+
+feedConfiguration :: FeedConfiguration
+feedConfiguration = FeedConfiguration
+    { feedTitle       = "wangqiao.me"
+    , feedDescription = "A Blog of Joe Wang"
+    , feedAuthorName  = "Joe Wang"
+    , feedAuthorEmail = "wangqiao11@hotmail.com"
+    , feedRoot        = "https://blog.wangqiao.me"
+    }

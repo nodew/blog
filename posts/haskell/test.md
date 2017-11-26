@@ -9,3 +9,11 @@ Harum in in consequatur dolores rem quis. Molestias neque magnam saepe esse aspe
 Nam impedit qui. Officiis quas reprehenderit voluptatem quis omnis ut rerum. Nam quos velit cum enim non ratione mollitia.
 
 Ipsa perferendis ducimus possimus pariatur non animi dolor. Vitae esse dolores eos ipsum ea. Mollitia commodi porro.
+
+```haskell
+module Main where
+
+main = do
+  putStrLn "hello world"
+
+```

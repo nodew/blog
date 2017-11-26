@@ -14,5 +14,8 @@ main = hakyll $ do
     matchPosts tags categories
     buildStaticPages ["about.rst", "contact.markdown", "404.md"]
     createArchives
-    createHomePage
+    createHomePage categories tags
+    buildPagination
     matchTemplates
+    -- createAtomXML
+    -- createRSS
