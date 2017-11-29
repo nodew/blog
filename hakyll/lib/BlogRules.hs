@@ -42,6 +42,7 @@ matchPosts :: Tags -> Tags -> Rules ()
 matchPosts tags categories = match postsGlob $ do
   route $ setExtension "html"
   compile $ pandocCompiler
+              >>= saveSnapshot "content"
               >>= loadAndApplyTemplate "templates/post.html"    (postCtxWithTags tags categories)
               >>= loadAndApplyTemplate "templates/default.html" (postCtxWithTags tags categories)
               >>= relativizeUrls
@@ -119,7 +120,11 @@ buildPagination = do
     pages <- buildPaginateWith
               (\ids -> sortRecentFirst ids >>= return . paginateEvery 1)
               postsGlob
-              (\n -> fromCapture "page/*.html" (show n))
+              (\n ->
+                if n == 1 then
+                    "blog.html"
+                else
+                    fromCapture "blog/*.html" (show n))
 
     paginateRules pages $ \pageNum pattern -> do
         route idRoute
@@ -135,21 +140,24 @@ buildPagination = do
               >>= loadAndApplyTemplate "templates/default.html" ctx
               >>= relativizeUrls
 
+createFeed :: [Identifier]
+           -> (FeedConfiguration
+              -> Context String
+              -> [Item String]
+              -> Compiler (Item String))
+           -> Rules ()
+createFeed ids render = create ids $ do
+    route idRoute
+    compile $ do
+      let feedCtx = postCtx `mappend` bodyField "description"
+      posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsGlob "content"
+      render feedConfiguration feedCtx posts
+
 createAtomXML :: Rules ()
-createAtomXML = create ["atom.xml"] $ do
-  route idRoute
-  compile $ do
-    let feedCtx = postCtx `mappend` bodyField "description"
-    posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsGlob "content"
-    renderAtom feedConfiguration feedCtx posts
+createAtomXML = createFeed ["atom.xml"] renderAtom
 
 createRSS :: Rules ()
-createRSS = create ["rss.xml"] $ do
-  route idRoute
-  compile $ do
-    let feedCtx = postCtx `mappend` bodyField "description"
-    posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsGlob "content"
-    renderRss feedConfiguration feedCtx posts
+createRSS = createFeed ["rss.xml"] renderRss
 
 postCtx :: Context String
 postCtx = mconcat
@@ -172,5 +180,5 @@ feedConfiguration = FeedConfiguration
     , feedDescription = "A Blog of Joe Wang"
     , feedAuthorName  = "Joe Wang"
     , feedAuthorEmail = "wangqiao11@hotmail.com"
-    , feedRoot        = "https://blog.wangqiao.me"
+    , feedRoot        = "https://wangqiao.me"
     }

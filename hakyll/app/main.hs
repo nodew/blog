@@ -17,5 +17,5 @@ main = hakyll $ do
     createHomePage categories tags
     buildPagination
     matchTemplates
-    -- createAtomXML
-    -- createRSS
+    createAtomXML
+    createRSS
