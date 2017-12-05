@@ -3,7 +3,10 @@
 {-# LANGUAGE OverloadedStrings  #-}
 
 module BlogRules (
-  matchStatics
+  staticGlog
+, postsGlob
+, templatesGlob
+, matchStatics
 , matchPosts
 , matchTemplates
 , getTags
@@ -20,6 +23,8 @@ module BlogRules (
 
 import Data.Monoid (mappend, (<>))
 import Hakyll hiding (getTags)
+
+-- pageSize = 3
 
 staticGlog :: Pattern
 staticGlog = fromGlob "static_dist/**"
@@ -56,16 +61,16 @@ getCategories url = buildCategories postsGlob (fromCapture url)
 buildUpCollections :: String -> Tags -> Rules ()
 buildUpCollections collectionType tags = tagsRules tags $ \tag pattern -> do
   route idRoute
-  compile $ do
-      posts <- recentFirst =<< loadAll pattern
-      let ctx = constField "tag" tag
-              `mappend` constField "type" collectionType
-              `mappend` listField "posts" postCtx (return posts)
-              `mappend` defaultContext
-      makeItem ""
-        >>= loadAndApplyTemplate "templates/tag.html" ctx
-        >>= loadAndApplyTemplate "templates/default.html" ctx
-        >>= relativizeUrls
+  buildPagination (collectionType <> "/") tag pattern "templates/tag.html"
+    -- posts <- recentFirst =<< loadAll pattern
+    -- let ctx = constField "tag" tag
+    --         <> constField "type" collectionType
+    --         <> listField "posts" postCtx (return posts)
+    --         <> defaultContext
+    -- makeItem ""
+    --   >>= loadAndApplyTemplate "templates/tag.html" ctx
+    --   >>= loadAndApplyTemplate "templates/default.html" ctx
+    --   >>= relativizeUrls
 
 buildUpTags :: Tags -> Rules ()
 buildUpTags = buildUpCollections "tag"
@@ -87,58 +92,56 @@ createArchives :: Rules ()
 createArchives = create ["archive.html"] $ do
   route idRoute
   compile $ do
-      posts <- recentFirst =<< loadAll "posts/**"
-      let archiveCtx =
-              listField "posts" postCtx (return posts) `mappend`
-              constField "title" "Archives"            `mappend`
-              defaultContext
+    posts <- recentFirst =<< loadAll postsGlob
+    let archiveCtx = listField "posts" postCtx (return posts)
+                  <> constField "title" "Archives"
+                  <> defaultContext
 
-      makeItem ""
-          >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
-          >>= loadAndApplyTemplate "templates/default.html" archiveCtx
-          >>= relativizeUrls
+    makeItem ""
+      >>= loadAndApplyTemplate "templates/archive.html" archiveCtx
+      >>= loadAndApplyTemplate "templates/default.html" archiveCtx
+      >>= relativizeUrls
 
 createHomePage :: Tags -> Tags -> Rules ()
 createHomePage cats tags = match "pages/index.html" $ do
     route $ gsubRoute "pages/" $ const ""
     compile $ do
-        posts <- recentFirst =<< loadAll postsGlob
-        let indexCtx =
-                listField "posts" postCtx (return posts) `mappend`
-                constField "title" "Home"                `mappend`
-                field "tags" (\_ -> renderTagList tags) `mappend`
-                field "categories" (\_ -> renderTagList cats) `mappend`
-                defaultContext
+      posts <- fmap (take 3) . recentFirst =<< loadAll postsGlob
+      let indexCtx = listField "posts" postCtx (return posts)
+                  <> constField "title" "Home"
+                  <> field "tags" (\_ -> renderTagList tags)
+                  <> field "categories" (\_ -> renderTagList cats)
+                  <> defaultContext
 
-        getResourceBody
-            >>= applyAsTemplate indexCtx
-            >>= loadAndApplyTemplate "templates/default.html" indexCtx
-            >>= relativizeUrls
+      getResourceBody
+        >>= applyAsTemplate indexCtx
+        >>= loadAndApplyTemplate "templates/default.html" indexCtx
+        >>= relativizeUrls
 
-buildPagination :: Rules ()
-buildPagination = do
-    pages <- buildPaginateWith
-              (\ids -> sortRecentFirst ids >>= return . paginateEvery 1)
-              postsGlob
-              (\n ->
-                if n == 1 then
-                    "blog.html"
-                else
-                    fromCapture "blog/*.html" (show n))
+buildPagination :: String -> String -> Pattern -> Identifier -> Rules ()
+buildPagination prefix tag glob template = do
+  pages <- buildPaginateWith
+            (\ids -> sortRecentFirst ids >>= return . paginateEvery 1)
+            glob
+            (\n ->
+              if n == 1 then
+                fromFilePath (prefix <> tag <> ".html")
+              else
+                fromCapture (fromGlob (prefix <> tag <> "/*.html")) (show n))
 
-    paginateRules pages $ \pageNum pattern -> do
-        route idRoute
-        compile $ do
-          posts <- recentFirst =<< loadAll pattern
-          let paginateCtx = paginateContext pages pageNum
-          let ctx         = constField "title" "Posts"
-                          <> listField "posts" postCtx (return posts)
-                          <> paginateCtx
-                          <> defaultContext
-          makeItem ""
-              >>= loadAndApplyTemplate "templates/posts.html" ctx
-              >>= loadAndApplyTemplate "templates/default.html" ctx
-              >>= relativizeUrls
+  paginateRules pages $ \pageNum pattern -> do
+    route idRoute
+    compile $ do
+      posts <- recentFirst =<< loadAll pattern
+      let paginateCtx = paginateContext pages pageNum
+      let ctx         = constField "title" "Posts"
+                      <> listField "posts" postCtx (return posts)
+                      <> paginateCtx
+                      <> defaultContext
+      makeItem ""
+        >>= loadAndApplyTemplate template ctx
+        >>= loadAndApplyTemplate "templates/default.html" ctx
+        >>= relativizeUrls
 
 createFeed :: [Identifier]
            -> (FeedConfiguration
@@ -147,11 +150,11 @@ createFeed :: [Identifier]
               -> Compiler (Item String))
            -> Rules ()
 createFeed ids render = create ids $ do
-    route idRoute
-    compile $ do
-      let feedCtx = postCtx `mappend` bodyField "description"
-      posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsGlob "content"
-      render feedConfiguration feedCtx posts
+  route idRoute
+  compile $ do
+    let feedCtx = postCtx <> bodyField "description"
+    posts <- fmap (take 10) . recentFirst =<< loadAllSnapshots postsGlob "content"
+    render feedConfiguration feedCtx posts
 
 createAtomXML :: Rules ()
 createAtomXML = createFeed ["atom.xml"] renderAtom
@@ -161,24 +164,24 @@ createRSS = createFeed ["rss.xml"] renderRss
 
 postCtx :: Context String
 postCtx = mconcat
-    [ dateField "date" "%B %e, %Y"
-    , constField "author" "Joe Wang"
-    , defaultContext
-    ]
+  [ dateField "date" "%B %e, %Y"
+  , constField "author" "Joe Wang"
+  , defaultContext
+  ]
 
 postCtxWithTags :: Tags -> Tags -> Context String
 postCtxWithTags tags cats = mconcat
-    [
-      tagsField "tags" tags
-    , categoryField "categories" cats
-    , postCtx
-    ]
+  [
+    tagsField "tags" tags
+  , categoryField "categories" cats
+  , postCtx
+  ]
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration = FeedConfiguration
-    { feedTitle       = "wangqiao.me"
-    , feedDescription = "A Blog of Joe Wang"
-    , feedAuthorName  = "Joe Wang"
-    , feedAuthorEmail = "wangqiao11@hotmail.com"
-    , feedRoot        = "https://wangqiao.me"
-    }
+  { feedTitle       = "wangqiao.me"
+  , feedDescription = "A Blog of Joe Wang"
+  , feedAuthorName  = "Joe Wang"
+  , feedAuthorEmail = "wangqiao11@hotmail.com"
+  , feedRoot        = "https://wangqiao.me"
+  }
