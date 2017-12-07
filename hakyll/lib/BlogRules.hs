@@ -112,7 +112,7 @@ createHomePage cats tags = match "pages/index.html" $ do
         >>= relativizeUrls
 
 createPostList :: Rules ()
-createPostList = buildPagination "" "articles" postsGlob "templates/posts.html"
+createPostList = buildPagination "" "articles" postsGlob "templates/articles.html"
 
 buildPagination :: String -> String -> Pattern -> Identifier -> Rules ()
 buildPagination prefix tag glob template = do
