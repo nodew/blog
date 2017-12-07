@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>wangqiao.me</title>
+        <link>https://wangqiao.me</link>
+        <description><![CDATA[A Blog of Joe Wang]]></description>
+        <atom:link href="https://wangqiao.me/rss.xml" rel="self"
+                   type="application/rss+xml" />
+        <lastBuildDate>Tue, 31 Oct 2017 00:00:00 UT</lastBuildDate>
+        <item>
+    <title>test</title>
+    <link>https://wangqiao.me/posts/haskell/test.html</link>
+    <description><![CDATA[<p>Harum in in consequatur dolores rem quis. Molestias neque magnam saepe esse aspernatur sint. Aliquam recusandae alias. Rerum facere tenetur aut illum enim quia commodi. Repellat cupiditate ut quae culpa voluptatem dolor sit deserunt praesentium. Officiis repellat eos corporis sapiente sit voluptatum.</p>
+<p>Nam impedit qui. Officiis quas reprehenderit voluptatem quis omnis ut rerum. Nam quos velit cum enim non ratione mollitia.</p>
+<p>Ipsa perferendis ducimus possimus pariatur non animi dolor. Vitae esse dolores eos ipsum ea. Mollitia commodi porro.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span>
+
+main <span class="fu">=</span> <span class="kw">do</span>
+  putStrLn <span class="st">&quot;hello world&quot;</span></code></pre></div>]]></description>
+    <pubDate>Tue, 31 Oct 2017 00:00:00 UT</pubDate>
+    <guid>https://wangqiao.me/posts/haskell/test.html</guid>
+    <dc:creator>Joe Wang</dc:creator>
+</item>
+
+    </channel>
+</rss>
