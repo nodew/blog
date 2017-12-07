@@ -16,15 +16,17 @@ module BlogRules (
 , buildStaticPages
 , createArchives
 , createHomePage
+, createPostList
 , buildPagination
 , createAtomXML
 , createRSS
 ) where
 
-import Data.Monoid (mappend, (<>))
+import Data.Monoid ((<>))
 import Hakyll hiding (getTags)
 
--- pageSize = 3
+pageSize :: Int
+pageSize = 3
 
 staticGlog :: Pattern
 staticGlog = fromGlob "static_dist/**"
@@ -62,21 +64,12 @@ buildUpCollections :: String -> Tags -> Rules ()
 buildUpCollections collectionType tags = tagsRules tags $ \tag pattern -> do
   route idRoute
   buildPagination (collectionType <> "/") tag pattern "templates/tag.html"
-    -- posts <- recentFirst =<< loadAll pattern
-    -- let ctx = constField "tag" tag
-    --         <> constField "type" collectionType
-    --         <> listField "posts" postCtx (return posts)
-    --         <> defaultContext
-    -- makeItem ""
-    --   >>= loadAndApplyTemplate "templates/tag.html" ctx
-    --   >>= loadAndApplyTemplate "templates/default.html" ctx
-    --   >>= relativizeUrls
 
 buildUpTags :: Tags -> Rules ()
-buildUpTags = buildUpCollections "tag"
+buildUpTags = buildUpCollections "tags"
 
 buildUpCategories :: Tags -> Rules ()
-buildUpCategories = buildUpCollections "category"
+buildUpCategories = buildUpCollections "categories"
 
 buildStaticPages :: [String] -> Rules ()
 buildStaticPages xs = match (fromList identifiers) $ do
@@ -118,10 +111,13 @@ createHomePage cats tags = match "pages/index.html" $ do
         >>= loadAndApplyTemplate "templates/default.html" indexCtx
         >>= relativizeUrls
 
+createPostList :: Rules ()
+createPostList = buildPagination "" "articles" postsGlob "templates/posts.html"
+
 buildPagination :: String -> String -> Pattern -> Identifier -> Rules ()
 buildPagination prefix tag glob template = do
-  pages <- buildPaginateWith
-            (\ids -> sortRecentFirst ids >>= return . paginateEvery 1)
+  paginate <- buildPaginateWith
+            (\ids -> sortRecentFirst ids >>= return . paginateEvery pageSize)
             glob
             (\n ->
               if n == 1 then
@@ -129,12 +125,12 @@ buildPagination prefix tag glob template = do
               else
                 fromCapture (fromGlob (prefix <> tag <> "/*.html")) (show n))
 
-  paginateRules pages $ \pageNum pattern -> do
+  paginateRules paginate $ \pageNum pattern -> do
     route idRoute
     compile $ do
       posts <- recentFirst =<< loadAll pattern
-      let paginateCtx = paginateContext pages pageNum
-      let ctx         = constField "title" "Posts"
+      let paginateCtx = paginateContext paginate pageNum
+      let ctx         = constField "title" tag
                       <> listField "posts" postCtx (return posts)
                       <> paginateCtx
                       <> defaultContext
