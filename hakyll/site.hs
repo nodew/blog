@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 import           Hakyll hiding (getTags)
-import Data.Monoid ((<>))
+import           Data.Monoid ((<>))
 --------------------------------------------------------------------------------
 
 main :: IO ()
@@ -32,6 +32,7 @@ main = hakyllWith config $ do
                 >>= relativizeUrls
 
     createPostList
+    createSlides
     matchTemplates
     createAtomXML
     createRSS
@@ -53,6 +54,9 @@ staticGlog = fromGlob "static_dist/**"
 
 postsGlob :: Pattern
 postsGlob = fromGlob "posts/**"
+
+slidesGlob :: Pattern
+slidesGlob = fromGlob "slides/**"
 
 templatesGlob :: Pattern
 templatesGlob = fromGlob "templates/**"
@@ -142,6 +146,14 @@ buildPagination prefix tag glob template = do
                 >>= loadAndApplyTemplate template ctx
                 >>= loadAndApplyTemplate "templates/default.html" ctx
                 >>= relativizeUrls
+
+createSlides :: Rules ()
+createSlides = match slidesGlob $ do
+    route $ setExtension ".html"
+    compile $ do
+        pandocCompiler
+            >>= loadAndApplyTemplate "templates/slides.html" defaultContext
+            >>= relativizeUrls
 
 createFeed :: [Identifier]
             -> (FeedConfiguration
