@@ -2,12 +2,14 @@ MSG := $(shell echo `date '+%Y-%m-%d %H:%M:%S'`)
 
 default: build
 
-watch: build-exec clean
-		node_modules/.bin/gulp watch & stack exec blog watch
+watch: build
+		stack exec blog watch & node_modules/.bin/gulp watch
 
-build: build-exec clean
-		node_modules/.bin/gulp build
+build: build-exec clean build-static
 		stack exec blog build
+
+build-static:
+	node_modules/.bin/gulp build
 
 build-exec:
 		stack build
