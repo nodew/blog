@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>夜色残阳 | slides - Docker Overview</title>
+        <meta name="description" content="Personal blog site">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="stylesheet" href="../static_dist/lib/reveal.js/css/reveal.css">
+        <link rel="stylesheet" href="../static_dist/lib/reveal.js/css/theme/league.css">
+        <link rel="stylesheet" href="../static_dist/lib/reveal.js/lib/css/zenburn.css">
+        <script>
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match(/print-pdf/gi) ? '/static_dist/lib/reveal.js/css/print/pdf.css' : '/static_dist/lib/reveal.js/css/print/paper.css';
+            document.getElementsByTagName('head')[0].appendChild(link);
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+<h1 id="docker-overview">Docker Overview</h1>
+<a href="https://docs.docker.com/engine/docker-overview/" class="uri">https://docs.docker.com/engine/docker-overview/</a>
+</section>
+<section>
+<h3 id="what-is-docker">What is docker?</h3>
+<ul>
+<li>Docker is a company</li>
+<li>Docker is a project created by `Docker` to enable and accelerate software containerization</li>
+</ul>
+<a href="https://www.docker.com/what-docker" class="uri">https://www.docker.com/what-docker</a>
+</section>
+<section>
+<h3 id="first-what-is-a-container">First, What is a `Container`?</h3>
+</section>
+<section>
+<p>Container is an operating-system-level virtualization</p>
+</section>
+<section>
+<style>
+    .container-vs-vm {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+    .container-vs-vm span {
+      display: block;
+    }
+    .reveal section .container-vs-vm img {
+      width: 300px;
+      margin: 40px;
+    }
+  </style>
+<h3 id="containers-vs.-virtual-machines">Containers vs. Virtual Machines</h3>
+<div class="container-vs-vm">
+<div>
+<img src="../static_dist/images/docker-overview/Container@2x.png" alt="container" /> <span>Container</span>
+</div>
+<div>
+<img src="../static_dist/images/docker-overview/VM@2x.png" alt="vm" /> <span>VM</span>
+</div>
+</div>
+</section>
+<section>
+<h3 id="why-container">Why Container?</h3>
+<div class="fragment fade-up" data-fragment-index="0">
+Agility(敏捷)
+</div>
+<div class="fragment fade-up" data-fragment-index="1">
+Portability(可移植性)
+</div>
+<div class="fragment fade-up" data-fragment-index="2">
+Security(安全)
+</div>
+<div class="fragment fade-up" data-fragment-index="3">
+Cost savings(省钱)
+</div>
+</section>
+<section>
+<h3 id="some-basic-concepts">Some basic concepts</h3>
+<div class="fragment fade-up" data-fragment-index="0">
+Namespace
+</div>
+<div class="fragment fade-up" data-fragment-index="1">
+CGroup
+</div>
+<div class="fragment fade-up" data-fragment-index="2">
+UnioFS
+</div>
+</section>
+<section>
+<h3 id="namespace">Namespace</h3>
+<style>
+    table {
+      border-width: 0px;
+      border-style: initial;
+      border-color: initial;
+      font-size:12px
+    }
+    .reveal table th, .reveal table td {
+      font-size: 24px;
+    }
+  </style>
+<table>
+<thead>
+<tr class="header">
+<th>Namespace</th>
+<th>系统调用参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>PID</td>
+<td>CLONE_NEW_PID</td>
+<td>隔离进程编号</td>
+</tr>
+<tr class="even">
+<td>UTS</td>
+<td>CLONE_NEWUTS</td>
+<td>主机名</td>
+</tr>
+<tr class="odd">
+<td>IPC</td>
+<td>CLONE_NEWIPC</td>
+<td>进程通讯相关的，信号量、消息队列、内存映射</td>
+</tr>
+<tr class="even">
+<td>Network</td>
+<td>CLONE_NEWNET</td>
+<td>网络协议栈、ARP表、路由表、NAT表</td>
+</tr>
+<tr class="odd">
+<td>Mount</td>
+<td>CLONE_NEWNS</td>
+<td>文件系统挂载点</td>
+</tr>
+<tr class="even">
+<td>User</td>
+<td>CLONE_NEWUSER</td>
+<td>用户、组名</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section>
+<h3 id="cgroup">CGroup</h3>
+<style>
+    .reveal .cgroup div {
+      font-size: 16px;
+      margin: 24px 0;
+      text-align: left;
+    }
+  </style>
+<div class="cgroup">
+<div>
+任务（task）：在 cgroups 中，任务就是系统的一个进程；
+</div>
+<div>
+控制族群（control group）：控制族群就是一组按照某种标准划分的进程。Cgroups 中的资源控制都是以控制族群为单位实现。一个进程可以加入到某个控制族群，也从一个进程组迁移到另一个控制族群。一个进程组的进程可以使用 cgroups 以控制族群为单位分配的资源，同时受到 cgroups 以控制族群为单位设定的限制；
+</div>
+<div>
+层级（hierarchy）：控制族群可以组织成 hierarchical 的形式，既一颗控制族群树。控制族群树上的子节点控制族群是父节点控制族群的孩子，继承父控制族群的特定的属性；
+</div>
+<div>
+子系统（subsystem）：一个子系统就是一个资源控制器，比如 cpu 子系统就是控制 cpu 时间分配的一个控制器。子系统必须附加（attach）到一个层级上才能起作用，一个子系统附加到某个层级以后，这个层级上的所有控制族群都受到这个子系统的控制。
+</div>
+</div>
+</section>
+<section>
+<h3 id="unionfs">UnionFS</h3>
+<img src="../static_dist/images/docker-overview/unionfs.png" />
+</section>
+<section>
+<h3 id="aufs">AUFS</h3>
+<h4 id="advanced-multi-layered-unification-filesystem">(Advanced Multi-layered Unification Filesystem)</h4>
+<style>
+    .aufs-layer-img {
+      width: 560px;
+    }
+  </style>
+<img src="../static_dist/images/docker-overview/aufs_layers.jpg" alt="aufs layer" class="aufs-layer-img" />
+</section>
+<section>
+<h3 id="aufs-1">AUFS</h3>
+<h4 id="advanced-multi-layered-unification-filesystem-1">(Advanced Multi-layered Unification Filesystem)</h4>
+<style>
+    .docker-fs-img {
+      width: 560px;
+    }
+  </style>
+<img src="../static_dist/images/docker-overview/docker-filesystems.png" alt="docker filesystem" class="docker-fs-img" />
+</section>
+<section>
+<h3 id="docker-architecture">Docker architecture</h3>
+<img src="../static_dist/images/docker-overview/docker_architecture.svg" />
+</section>
+<section>
+<h3 id="showtime">Showtime</h3>
+</section>
+            </div>
+        </div>
+        <script src="../static_dist/lib/reveal.js/lib/js/head.min.js"></script>
+        <script src="../static_dist/lib/reveal.js/js/reveal.js"></script>
+        <script>
+          Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+            transition: 'slide',
+            dependencies: [
+                { src: '/static_dist/lib/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/static_dist/lib/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/static_dist/lib/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/static_dist/lib/reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                { src: '/static_dist/lib/reveal.js/plugin/search/search.js', async: true },
+                { src: '/static_dist/lib/reveal.js/plugin/zoom-js/zoom.js', async: true },
+                { src: '/static_dist/lib/reveal.js/plugin/notes/notes.js', async: true }
+            ]
+          });
+        </script>
+    </body>
+</html>
