@@ -18,7 +18,7 @@
     <summary type="html"><![CDATA[<p>Harum in in consequatur dolores rem quis. Molestias neque magnam saepe esse aspernatur sint. Aliquam recusandae alias. Rerum facere tenetur aut illum enim quia commodi. Repellat cupiditate ut quae culpa voluptatem dolor sit deserunt praesentium. Officiis repellat eos corporis sapiente sit voluptatum.</p>
 <p>Nam impedit qui. Officiis quas reprehenderit voluptatem quis omnis ut rerum. Nam quos velit cum enim non ratione mollitia.</p>
 <p>Ipsa perferendis ducimus possimus pariatur non animi dolor. Vitae esse dolores eos ipsum ea. Mollitia commodi porro.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource haskell numberLines"><code class="sourceCode haskell"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">module</span> <span class="dt">Main</span> <span class="kw">where</span></a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb1-3" data-line-number="3">main <span class="fu">=</span> <span class="kw">do</span></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4">  putStrLn <span class="st">&quot;hello world&quot;</span></a></code></pre></div>]]></summary>
