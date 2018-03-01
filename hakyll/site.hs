@@ -12,7 +12,7 @@ main = hakyllWith config $ do
     buildUpTags tags
     buildUpCategories categories
     matchPosts tags categories
-    buildStaticPages ["about.html", "404.html", "test.html"]
+    buildStaticPages ["about.html", "404.html"]
     createArchives
 
     -- create home page
@@ -98,7 +98,7 @@ buildUpCategories = buildUpCollections "categories"
 buildStaticPages :: [String] -> Rules ()
 buildStaticPages xs = match (fromList identifiers) $ do
     route $ gsubRoute prefix (const "") `composeRoutes` setExtension "html"
-    compile $ pandocCompiler
+    compile $ getResourceBody
         >>= loadAndApplyTemplate "templates/default.html" defaultContext
         >>= relativizeUrls
     where
@@ -151,7 +151,7 @@ createSlides :: Rules ()
 createSlides = match slidesGlob $ do
     route $ setExtension ".html"
     compile $ do
-        pandocCompiler
+        getResourceBody
             >>= loadAndApplyTemplate "templates/slides.html" defaultContext
             >>= relativizeUrls
 

@@ -10,10 +10,9 @@ Nam impedit qui. Officiis quas reprehenderit voluptatem quis omnis ut rerum. Nam
 
 Ipsa perferendis ducimus possimus pariatur non animi dolor. Vitae esse dolores eos ipsum ea. Mollitia commodi porro.
 
-```haskell
+~~~ {.sourceCode .haskell .numberLines}
 module Main where
 
 main = do
   putStrLn "hello world"
-
-```
+~~~
