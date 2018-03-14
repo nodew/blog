@@ -33,6 +33,7 @@ main = hakyllWith config $ do
 
     createPostList
     createSlides
+    createSlideList
     matchTemplates
     createAtomXML
     createRSS
@@ -122,6 +123,20 @@ createArchives = create ["archive.html"] $ do
 createPostList :: Rules ()
 createPostList = buildPagination "" "articles" postsGlob "templates/articles.html"
 
+createSlideList :: Rules ()
+createSlideList = create ["slides.html"] $ do
+    route idRoute
+    compile $ do
+        slides <- recentFirst =<< loadAll slidesGlob
+        let slidesCtx = listField "slides" slideCtx (return slides)
+                       <> constField "title" "Slides"
+                       <> defaultContext
+
+        makeItem ""
+            >>= loadAndApplyTemplate "templates/slides.html" slidesCtx
+            >>= loadAndApplyTemplate "templates/default.html" slidesCtx
+            >>= relativizeUrls
+
 buildPagination :: String -> String -> Pattern -> Identifier -> Rules ()
 buildPagination prefix tag glob template = do
     paginate <- buildPaginateWith
@@ -152,7 +167,7 @@ createSlides = match slidesGlob $ do
     route $ setExtension ".html"
     compile $ do
         getResourceBody
-            >>= loadAndApplyTemplate "templates/slides.html" defaultContext
+            >>= loadAndApplyTemplate "templates/slide.html" defaultContext
             >>= relativizeUrls
 
 createFeed :: [Identifier]
@@ -176,6 +191,13 @@ createRSS = createFeed ["rss.xml"] renderRss
 
 postCtx :: Context String
 postCtx = mconcat
+    [ dateField "date" "%B %e, %Y"
+    , constField "author" "Joe Wang"
+    , defaultContext
+    ]
+
+slideCtx :: Context String
+slideCtx = mconcat
     [ dateField "date" "%B %e, %Y"
     , constField "author" "Joe Wang"
     , defaultContext
