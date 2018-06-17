@@ -20,6 +20,7 @@ cabal.sandbox.config
 .stack-work/
 _cache/
 _site/
+.shake/
 node_modules/
 static_dist
 cabal-helper*/
