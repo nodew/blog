@@ -125,7 +125,7 @@ createArchives = create ["archive.html"] $ do
 
 createPostList :: Rules ()
 createPostList =
-    buildPagination "" "articles" postsGlob "templates/articles.html"
+    buildPagination "" "blog" postsGlob "templates/blog.html"
 
 createSlideList :: Rules ()
 createSlideList = create ["slides.html"] $ do

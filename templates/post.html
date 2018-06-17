@@ -1,15 +1,7 @@
-<h3>$title$</h3>
-<div class="info">
-    Posted on $date$
-    $if(categories)$
-        categories: $categories$
-    $endif$
-    $if(tags)$
-        Tags: $tags$
-    $endif$
-    $if(author)$
-        by $author$
-    $endif$
+<div class="content post">
+  <h3 class="post-title">$title$</h3>
+  <div class="post-date">$date$</div>
+  <div class="post-body">
+    $body$
+  </div>
 </div>
-
-$body$
