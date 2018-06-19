@@ -1,11 +1,23 @@
 ---
 title: Home
 ---
-<div class="main">
-  <h2>Welcome</h2>
-
-  <p>Welcome to my blog!</p>
-
-  <h2>Rencent posts</h2>
-  $partial("templates/post-list.html")$
+<style>
+  .header,
+  .footer {
+    background: none;
+  }
+</style>
+<canvas id="background"></canvas>
+<div class="index">
+  <h2>Welcome to my personal grocery store</h2>
+  <div class="jump-btns">
+    <a href="/blog.html">View Blog</a>
+    <a href="https://github.com/nodew">
+      $partial("templates/icons/github.svg")$
+      <span>
+        Github
+      </span>
+    </a>
+  </div>
 </div>
+<script src="/static_dist/js/background.js" />

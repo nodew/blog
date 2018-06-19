@@ -37,6 +37,15 @@ main = shakeArgsWith shakeOptions options $ \opts targets -> return $ Just $ do
         need ["build-static"]
         cmd_ "stack exec site build"
 
+    phony "dev" $ do
+        need ["clean"]
+        need ["build"]
+        need ["watch-site"]
+
+    phony "watch-site" $ cmd_ "stack exec site -- watch"
+
+    phony "watch-static" $ cmd_ "npm run watch"
+
     phony "build-static" $ cmd_ "npm run build"
 
     phony "build-exe" $ cmd_ "stack build"
@@ -44,7 +53,7 @@ main = shakeArgsWith shakeOptions options $ \opts targets -> return $ Just $ do
     phony "publish" $ do
         let message = fromMaybe "build" $ lookup "message" opts
         cmd_ ["git", "checkout", "gh-pages"]
-        cmd_ "cp -r _site/* ./"
+        copyFile' "_site" "./"
         cmd_ ["git add", "."]
         cmd_ ["git commit", "-m"] [message]
         cmd_ "git push origin gh-pages"

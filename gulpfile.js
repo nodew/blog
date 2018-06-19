@@ -9,6 +9,7 @@ const copy = require('gulp-copy');
 const clean = require('gulp-clean');
 const exec = require('child_process').exec;
 const runSequence = require('run-sequence');
+const globby = require('globby');
 
 gulp.task('stylus', function () {
   return gulp.src(['./static/css/*.styl'])
@@ -21,17 +22,20 @@ gulp.task('stylus', function () {
 
 gulp.task('javascript', function () {
   // set up the browserify instance on a task basis
-  return browserify({
-    entries: [
-      './static/js/index.js'
-    ],
-    debug: true
+  return globby([
+    './static/js/*.js',
+  ]).then(entries => {
+    return entries.forEach(file => {
+      var filename = file.substr(file.lastIndexOf('/') + 1); // 取出文件名
+      return browserify(file)
+        .transform("babelify", { presets: ["@babel/preset-env"] })
+        .bundle()
+        .pipe(source(filename))
+        .pipe(buffer())
+        // .pipe(uglify())
+        .pipe(gulp.dest('./static_dist/js/'));
+    })
   })
-  .bundle()
-  .pipe(source('app.js'))
-  .pipe(buffer())
-  .pipe(uglify())
-  .pipe(gulp.dest('./static_dist/js/'));
 });
 
 gulp.task('images', function() {

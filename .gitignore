@@ -23,4 +23,4 @@ _site/
 .shake/
 node_modules/
 static_dist
-cabal-helper*/
+cabal-helper*
