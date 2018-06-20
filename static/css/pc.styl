@@ -96,6 +96,10 @@ p
     padding: 0 16px;
     text-decoration: none;
 
+    &:hover
+      color: #1E88E5;
+      border-color: #1E88E5;
+
   .jump-btns a + a
     margin-left: 36px;
 
@@ -128,6 +132,9 @@ p
         text-decoration: none
         color: #333
 
+        &:hover
+          color: #1E88E5;
+
     &-description
       margin-top: 16px
       line-height: 1.5
@@ -159,12 +166,6 @@ p
       line-height: 1.5
 
 .pagination
-  // &::before,
-  // &::after
-  //   content: ""
-  //   display: table
-  //   clear: both
-
   a
     display: inline-block
     font-size: 14px
@@ -209,3 +210,41 @@ div.sourceCode
   pre.sourceCode
     padding: 8px 0;
     margin-left: 2em;
+
+.about
+  h2, h3, ul
+    margin: 0;
+    padding: 0;
+    color: #111;
+
+  h2
+    margin: 20px 0;
+    font-weight: 400;
+    font-size: 32px;
+
+  h3
+    color: #333;
+    font-weight: 400;
+    font-size: 18px;
+
+  p
+    color: #666;
+
+  ul
+    margin: 12px 0;
+
+    li
+      margin-left: 20px;
+
+  a
+    color: #1E88E5;
+
+    svg
+      width: 18px;
+      height 18px;
+      vertical-align: text-bottom;
+
+  .divider
+    width: 100%;
+    height 1px;
+    border-bottom: 1px solid #f2f2f2;

@@ -102,6 +102,7 @@ buildStaticPages xs = match (fromList identifiers) $ do
     route $ gsubRoute prefix (const "") `composeRoutes` setExtension "html"
     compile
         $   getResourceBody
+        >>= applyAsTemplate defaultContext
         >>= loadAndApplyTemplate "templates/default.html" defaultContext
         >>= relativizeUrls
   where
