@@ -20,3 +20,7 @@ cabal.sandbox.config
 _cache/
 _site/
 node_modules/
+cabal-helper*
+.shake
+.ghci
+.DS_Store
