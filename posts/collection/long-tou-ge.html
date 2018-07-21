@@ -6,6 +6,14 @@
         <meta name="description" content="Personal blog site">
         <title>夜色残阳 | 博客 - 古乐府 - 陇头歌</title>
         <link rel="stylesheet" type="text/css" href="../../static_dist/css/default.css" />
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122703565-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-122703565-1');
+        </script>
     </head>
     <body>
         <header class="header">
@@ -38,8 +46,27 @@
 <p>陇头流水，鸣声幽咽。</p>
 <p>遥望秦川，心肝断绝。</p>
   </div>
+  <div id="comments"></div>
 </div>
-
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "古乐府 - 陇头歌",
+  owner: 'nodew',
+  repo: 'blog',
+  oauth: {
+    client_id: '3f36214bd191119338cc',
+    client_secret: '8527738f4cbb1a4b916c87d8573d57c9c4e57413',
+  },
+});
+gitment.render('comments')
+</script>
+<script>
+  if (window.localStorage) {
+    window.localStorage.setItem('last-read-post', location.href);
+  }
+</script>
 
         <footer class="footer">
   <div class="copyright">Copyright © 2017-2018 WANGQIAO.ME. All rights reserved.</div>
