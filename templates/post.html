@@ -4,4 +4,24 @@
   <div class="post-body">
     $body$
   </div>
+  <div id="comments"></div>
 </div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "$title$",
+  owner: 'nodew',
+  repo: 'blog',
+  oauth: {
+    client_id: '3f36214bd191119338cc',
+    client_secret: '8527738f4cbb1a4b916c87d8573d57c9c4e57413',
+  },
+});
+gitment.render('comments')
+</script>
+<script>
+  if (window.localStorage) {
+    window.localStorage.setItem('last-read-post', location.href);
+  }
+</script>

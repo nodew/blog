@@ -1,0 +1,9 @@
+---
+title: Redirecting...
+---
+<script>
+  if (window.localStorage) {
+    var redirect_url = window.localStorage.getItem('last-read-post');
+    location.href = redirect_url;
+  }
+</script>
