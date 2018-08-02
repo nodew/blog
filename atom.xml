@@ -10,15 +10,15 @@
     </author>
     <updated>2018-08-02T00:00:00Z</updated>
     <entry>
-    <title>树莓派折腾笔记 — 无显示器情况下连接使用树莓派</title>
-    <link href="https://wangqiao.me/posts/raspberrypi/start-raspberry-pi-without-screen.html" />
-    <id>https://wangqiao.me/posts/raspberrypi/start-raspberry-pi-without-screen.html</id>
+    <title>树莓派折腾笔记 - 无显示器情况下连接使用树莓派</title>
+    <link href="https://wangqiao.me/posts/hardware/start-raspberry-pi-without-screen.html" />
+    <id>https://wangqiao.me/posts/hardware/start-raspberry-pi-without-screen.html</id>
     <published>2018-08-02T00:00:00Z</published>
     <updated>2018-08-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[最近倒腾东西，翻出了几年前入手的一个raspberry pi 2代 b+的板子，上面都蒙了一层灰，开机后发现还能用。发挥环保主义的精神，废物再利用起来。网上讲树莓派的文章很多，然而讲怎么在没有显示器、不借助网线的情况下连接树莓派的文章基本上没有看到，所以记录下我目前的解决方案，方便日后自己折腾，不用再到Google上一通乱搜，二来是希望能帮助遇到过同样问题的朋友。]]></summary>
 </entry>
 <entry>
-    <title>古乐府 — 陇头歌</title>
+    <title>古乐府 - 陇头歌</title>
     <link href="https://wangqiao.me/posts/collection/long-tou-ge.html" />
     <id>https://wangqiao.me/posts/collection/long-tou-ge.html</id>
     <published>2018-06-20T00:00:00Z</published>
