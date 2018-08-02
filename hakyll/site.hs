@@ -12,7 +12,7 @@ main = hakyllWith config $ do
     buildUpTags tags
     buildUpCategories categories
     matchPosts tags categories
-    buildStaticPages ["about.html", "404.html", "auth-callback.html"]
+    buildStaticPages ["about.html", "404.html"]
     createArchives
 
     -- create home page
