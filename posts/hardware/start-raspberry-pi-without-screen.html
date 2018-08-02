@@ -130,7 +130,16 @@ $ screen /dev/cu.usbserial 115200</code></pre>
 <script>
 var gitment = new Gitment({
   title: "树莓派折腾笔记 - 无显示器情况下连接使用树莓派",
-  id: location.pathname.match(/^\/posts\/(.+)\.html
+  id: location.pathname.match(/^\/posts\/(.+)\.html/)[1],
+  owner: 'nodew',
+  repo: 'blog',
+  oauth: {
+    client_id: '3f36214bd191119338cc',
+    client_secret: '8527738f4cbb1a4b916c87d8573d57c9c4e57413',
+  },
+});
+gitment.render('comments')
+</script>
 
         <footer class="footer">
   <div class="copyright">Copyright © 2017-2018 WANGQIAO.ME. All rights reserved.</div>
@@ -140,5 +149,5 @@ var gitment = new Gitment({
   </div>
 </footer>
     </body>
-    <script src="/static_dist/js/index.js" />
+    <script src="../../static_dist/js/index.js"></script>
 </html>
