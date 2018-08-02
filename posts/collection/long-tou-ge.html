@@ -52,7 +52,17 @@
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
-  title: 
+  title: "古乐府 - 陇头歌",
+  id: location.href,
+  owner: 'nodew',
+  repo: 'blog',
+  oauth: {
+    client_id: '3f36214bd191119338cc',
+    client_secret: '8527738f4cbb1a4b916c87d8573d57c9c4e57413',
+  },
+});
+gitment.render('comments')
+</script>
 
         <footer class="footer">
   <div class="copyright">Copyright © 2017-2018 WANGQIAO.ME. All rights reserved.</div>
@@ -62,5 +72,5 @@ var gitment = new Gitment({
   </div>
 </footer>
     </body>
-    <script src="/static_dist/js/index.js" />
+    <script src="../../static_dist/js/index.js"></script>
 </html>
