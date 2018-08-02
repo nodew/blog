@@ -3,7 +3,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Personal blog site">
+        <meta name="keywords" content>
+        <meta name="description" content="陇头流水，流离山下。 ">
         <title>夜色残阳 | 博客 - 古乐府 - 陇头歌</title>
         <link rel="stylesheet" type="text/css" href="../../static_dist/css/default.css" />
         <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -53,16 +54,7 @@
 <script>
 var gitment = new Gitment({
   title: "古乐府 - 陇头歌",
-  id: location.href,
-  owner: 'nodew',
-  repo: 'blog',
-  oauth: {
-    client_id: '3f36214bd191119338cc',
-    client_secret: '8527738f4cbb1a4b916c87d8573d57c9c4e57413',
-  },
-});
-gitment.render('comments')
-</script>
+  id: location.pathname.match(/^\/posts\/(.+)\.html
 
         <footer class="footer">
   <div class="copyright">Copyright © 2017-2018 WANGQIAO.ME. All rights reserved.</div>
@@ -72,5 +64,5 @@ gitment.render('comments')
   </div>
 </footer>
     </body>
-    <script src="../../static_dist/js/index.js"></script>
+    <script src="/static_dist/js/index.js" />
 </html>
