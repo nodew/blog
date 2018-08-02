@@ -117,6 +117,8 @@ createArchives = create ["archive.html"] $ do
         let archiveCtx =
                 listField "posts" postCtx (return posts)
                     <> constField "title" "Archives"
+                    <> constField "keywords" "archives, posts"
+                    <> constField "description" "archives of posts"
                     <> defaultContext
 
         makeItem ""
@@ -136,6 +138,8 @@ createSlideList = create ["slides.html"] $ do
         let slidesCtx =
                 listField "slides" slideCtx (return slides)
                     <> constField "title" "Slides"
+                    <> constField "keywords" "slides, revealjs, js"
+                    <> constField "description" "archives of slides"
                     <> defaultContext
 
         makeItem ""
@@ -160,6 +164,8 @@ buildPagination prefix tag glob template = do
             let paginateCtx = paginateContext paginate pageNum
             let ctx =
                     constField "title" tag
+                        <> constField "keywords" ""
+                        <> constField "description" ""
                         <> listField "posts" postCtx (return posts)
                         <> paginateCtx
                         <> defaultContext

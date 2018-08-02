@@ -11,7 +11,7 @@
 <script>
 var gitment = new Gitment({
   title: "$title$",
-  id: location.href,
+  id: location.pathname.match(/^\/posts\/(.+)\.html$/)[1],
   owner: 'nodew',
   repo: 'blog',
   oauth: {
