@@ -10,6 +10,7 @@
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
 var gitment = new Gitment({
+  title: "$title$",
   id: location.href,
   owner: 'nodew',
   repo: 'blog',
@@ -19,9 +20,4 @@ var gitment = new Gitment({
   },
 });
 gitment.render('comments')
-</script>
-<script>
-  if (window.localStorage) {
-    window.localStorage.setItem('last-read-post', location.href);
-  }
 </script>
