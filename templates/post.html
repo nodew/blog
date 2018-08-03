@@ -9,9 +9,12 @@
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
+var matches = location.pathname.match(/^\/posts\/(.+)\.html/);
+var match = matches[1];
+var id = match.replace(/\d{4}-\d{2}-\d{2}-/, '');
 var gitment = new Gitment({
   title: "$title$",
-  id: location.pathname.match(/^\/posts\/(.+)\.html/)[1],
+  id: id,
   owner: 'nodew',
   repo: 'blog',
   oauth: {
