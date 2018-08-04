@@ -10,10 +10,12 @@
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122703565-1"></script>
         <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'UA-122703565-1');
+            if (document.URL.indexOf("wangqiao.me") >= 0) {
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'UA-122703565-1');
+            }
         </script>
     </head>
     <body>
@@ -33,7 +35,8 @@
   </nav>
 </header>
 
-        <div class="content post">
+        <link rel="stylesheet" href="../../static_dist/lib/highlight/styles/github.css"></style>
+<div class="content post">
   <h3 class="post-title">古乐府 - 陇头歌</h3>
   <div class="post-date">June 20, 2018</div>
   <div class="post-body">
@@ -49,6 +52,13 @@
   </div>
   <div id="comments"></div>
 </div>
+<script src="../../static_dist/lib/highlight/highlight.pack.js"></script>
+<script>
+hljs.configure({
+  tabReplace: '    ',
+});
+hljs.initHighlighting();
+</script>
 <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
 <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
 <script>
