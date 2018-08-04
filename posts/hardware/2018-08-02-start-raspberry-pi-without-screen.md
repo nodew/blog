@@ -1,7 +1,7 @@
 ---
 title: 树莓派折腾笔记 - 无显示器情况下连接使用树莓派
 date: "2018-08-02"
-tags: 树莓派
+tags: raspberry-pi
 keywords: "树莓派, Raspberry Pi, Wi-Fi, TTL"
 description: "最近倒腾东西，翻出了几年前入手的一个raspberry pi 2代 b+的板子，上面都蒙了一层灰，开机后发现还能用。发挥环保主义的精神，废物再利用起来。本文主要讲笔者怎么在没有显示器、不借助网线直连的情况下通过Wi-Fi连接以及通过串口连接的方式来连接到树莓派的，记录下来一是方便日后折腾，二来是希望能帮助遇到过同样问题的朋友。"
 ---
@@ -36,7 +36,7 @@ description: "最近倒腾东西，翻出了几年前入手的一个raspberry pi
 
 树莓派默认情况下是没有打开ssh连接的，在 `boot` 卷的根路径下新建一个名叫 `ssh`的空文件，树莓派启动的时候就会开启ssh的功能。
 
-```shell
+```bash
 $ touch ssh
 ```
 
@@ -48,7 +48,7 @@ $ touch ssh
 
 如果你的系统是 `Raspbian Jessie`的话，填入以下配置
 
-```shell
+```bash
 network={
     ssid="你的Wi-Fi名称"
     psk="Wi-Fi密码"
@@ -58,7 +58,7 @@ network={
 
 如果是系统是 `Raspbian Stretch` 的话，配置如下
 
-```shell
+```bash
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 network={
     ssid="你的Wi-Fi名称"
@@ -85,7 +85,7 @@ network={
 
 ### SSH 登录
 
-```shell
+```bash
 $ ssh pi@ip_address_of_your_raspberry_pi
 ```
 
@@ -113,7 +113,7 @@ $ ssh pi@ip_address_of_your_raspberry_pi
 
 一、通过上面的方法或者其他方式，已经能连接使用树莓派了。这种情况下，直接在树莓派对终端中输入
 
-```shell
+```bash
 $ sudo raspi-config
 ```
 
@@ -136,7 +136,7 @@ $ sudo raspi-config
 连接好了之后，如果我们在 Windows 环境下，可以使用 putty。打开 putty，选择串口通信，Serial line 输入 `COM3`，Speed 输入 `115200`，即树莓派的波特率。进去之后，我们看到一个小黑窗，这时候，键盘输入回车，树莓派就会让我们输入用户名以及密码，输入正确之后我们就可以为所欲为了。
 
 如果是在 Mac 环境下的话，我们把 USB 插入 Mac之后，我们的`/dev`路径下就会多出一个设备，假如叫做 `cu.usbserial`，这时候我们可以借助两个命令行工具。一个是 `minicom`，另一个是 `screen`。
-```shell
+```bash
 $ brew install minicom
 
 # or
@@ -146,7 +146,7 @@ $ brew install screen
 
 安装好之后，如下，使用相应的命令行
 
-```shell
+```bash
 $ minicom -o -D /dev/cu.usbserial -b 115200
 
 # or

@@ -1,7 +1,7 @@
 ---
 title: 古乐府 - 陇头歌
 date: "2018-06-20"
-tags: 古乐府
+tags: collection
 keywords: ""
 description: "陇头流水，流离山下。 "
 ---

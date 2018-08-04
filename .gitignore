@@ -24,3 +24,4 @@ _site/
 node_modules/
 static_dist
 cabal-helper*
+.DS_Store
