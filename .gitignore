@@ -1,27 +1,9 @@
-# Created by https://www.gitignore.io/api/haskell
-
-### Haskell ###
-dist
-cabal-dev
-*.o
-*.hi
-*.chi
-*.chs.h
-*.dyn_o
-*.dyn_hi
-.hpc
-.hsenv
-.cabal-sandbox/
-cabal.sandbox.config
-*.prof
-*.aux
-*.hp
-*.log
-.stack-work/
-_cache/
-_site/
-.shake/
 node_modules/
-static_dist
-cabal-helper*
-.DS_Store
+flow-typed/
+.cache/
+public/
+npm-debug.log
+.eslintcache
+.gatsby-context.js
+.idea
+gatsby-starter-lumen.iml
