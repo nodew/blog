@@ -24,11 +24,12 @@ export interface Node {
     tagSlugs?: string[],
   };
   frontmatter: {
+    title: string,
     date: string,
     description?: string,
     category?: string,
     tags?: string[],
-    title: string,
+    keywords?: string
   };
   html: string;
   id: string;

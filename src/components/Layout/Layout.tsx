@@ -7,13 +7,15 @@ interface Props {
   children: ReactNode;
   title: string;
   description?: string;
+  keywords?: string;
 }
 
-const Layout = ({ children, title, description }: Props) => (
+const Layout = ({ children, title, description, keywords }: Props) => (
   <div className={styles.layout}>
     <Helmet>
       <html lang="en" />
       <title>{title}</title>
+      <meta name="keyword" content={keywords} />
       <meta name="description" content={description} />
       <meta property="og:site_name" content={title} />
       <meta name="twitter:card" content="summary" />
