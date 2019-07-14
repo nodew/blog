@@ -5,8 +5,8 @@
 <url> <loc>https://wangqiao.me/pages/about/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://wangqiao.me/posts/long-tou-ge/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://wangqiao.me/posts/lazy-list-with-generator-and-iterator/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://wangqiao.me/posts/crawling-stock-data-in-fsharp/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://wangqiao.me/posts/start-raspberrypi-without-screen/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://wangqiao.me/posts/crawling-stock-data-in-fsharp/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://wangqiao.me/tag/generator</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://wangqiao.me/tag/iterator</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://wangqiao.me/tag/java-script</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
