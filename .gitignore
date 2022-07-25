@@ -1,0 +1,5 @@
+.cache
+node_modules
+public
+gatsby-types.d.ts
+src/__generated__
