@@ -1,9 +1,12 @@
 import React from "react";
 
+import Layout from "../components/Layout";
+import { Meta } from "../components/Meta";
+
 export default () => {
     return (
-        <div>
-            <h1>Hello World</h1>
-        </div>
+        <Layout activeNavItem="posts">
+            <Meta title="Posts" />
+        </Layout>
     );
 }

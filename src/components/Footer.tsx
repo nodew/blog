@@ -23,7 +23,7 @@ export const Footer = () => {
         <footer className="text-base mt-32 text-gray-400 dark:text-gray-600">
             <div className="max-w-5xl text-center m-auto">
                 <p>
-                    {name} © {year}, built with
+                    {name} © {year}, powered by
                     {` `}
                     <a href="https://www.gatsbyjs.com">Gatsby</a>
                 </p>

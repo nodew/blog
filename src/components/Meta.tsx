@@ -16,7 +16,8 @@ export const Meta = ({
     description = "",
     lang = "en",
     extras = [],
-    type = "website"
+    type = "website",
+    image = ""
 }: MetaProps) => {
     const { site } = useStaticQuery<GatsbyTypes.SiteMetaQuery>(
         graphql`
@@ -60,6 +61,10 @@ export const Meta = ({
                 {
                     property: `og:type`,
                     content: type,
+                },
+                {
+                    property: `og:image`,
+                    content: image,
                 },
                 {
                     name: `twitter:card`,

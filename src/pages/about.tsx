@@ -1,9 +1,63 @@
+import { graphql } from "gatsby";
 import React from "react";
 
-export default () => {
+import Layout from "../components/Layout";
+import { Meta } from "../components/Meta";
+
+interface AboutPageProps {
+    data: GatsbyTypes.AboutPageQuery;
+}
+
+export default ({ data }: AboutPageProps) => {
+    const githubUrl = `github.com/${data.site?.siteMetadata?.social?.github}`;
+    const twitterUrl = `twitter.com/${data.site?.siteMetadata?.social?.twitter}`;
+    const email = data.site?.siteMetadata?.author?.email;
+
     return (
-        <div>
-            <h1>About me</h1>
-        </div>
+        <Layout activeNavItem="about">
+            <div className="max-w-5xl mx-auto">
+                <Meta title="About me" />
+                <h1 className="text-5xl font-bold block text-center mb-14">About me</h1>
+                <div className="prose xl:prose-xl dark:prose-dark dark:xl:prose-dark-xl max-w-none">
+                    <p>
+                        I'm Qiao Wang, a software engineer living in China. I'm experienced in NodeJS/JavaScript and .NET development and I’ve been working in the field of web development for 6 years.
+                    </p>
+
+                    <p>
+                        Currently I'm working for Microsoft, on the M365 related products.
+                    </p>
+
+                    <p>
+                        My favorite languages are Haskell, C# and TypeScript.
+                    </p>
+
+                    <h2 className="text-center">Find me on</h2>
+                    <div>
+                        <ul className="text-center list-none">
+                            <li><a href={`mailto:${email}`}>{email}</a></li>
+                            <li><a href={`https://${githubUrl}`}>{githubUrl}</a></li>
+                            <li><a href={`https://${twitterUrl}`}>{twitterUrl}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </Layout>
     );
 }
+
+export const query = graphql`
+    query AboutPage {
+        site {
+            siteMetadata {
+                author {
+                    name
+                    email
+                }
+                social {
+                    github
+                    twitter
+                }
+            }
+        }
+    }
+`;

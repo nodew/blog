@@ -5,6 +5,7 @@ export const createSchemaCustomization = ({ actions }) => {
         type SiteSiteMetadata {
             author: Author
             siteUrl: String
+            title: String
             social: Social
         }
 
@@ -21,7 +22,7 @@ export const createSchemaCustomization = ({ actions }) => {
 
         type Frontmatter {
             title: String
-            description: String
+            excerpt: String
             date: Date @dateformat
             slug: String
             tags: [String]

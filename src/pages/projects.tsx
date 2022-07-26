@@ -1,9 +1,11 @@
 import React from "react";
 
+import Layout from "../components/Layout";
+
 export default () => {
     return (
-        <div>
+        <Layout activeNavItem="projects">
             <h1>Hello World</h1>
-        </div>
+        </Layout>
     );
 }

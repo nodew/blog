@@ -3,6 +3,7 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
     siteMetadata: {
         siteUrl: `https://wangqiao.me`,
+        title: "Qiao Wang",
         author: {
             name: "Qiao Wang",
             bio: "谁非过客，花是主人",
