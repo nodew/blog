@@ -7,51 +7,67 @@ const config: GatsbyConfig = {
         author: {
             name: "Qiao Wang",
             bio: "谁非过客，花是主人",
-            email: "wangqiao11@hotmail.com"
+            email: "wangqiao11@hotmail.com",
         },
         social: {
             twitter: `wangqiao11`,
-            github: `nodew`
-        }
+            github: `nodew`,
+        },
     },
     graphqlTypegen: true,
     plugins: [
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-              name: `pages`,
-              path: `${__dirname}/src/pages`,
+                name: `pages`,
+                path: `${__dirname}/src/pages`,
             },
         },
         {
             resolve: `gatsby-source-filesystem`,
             options: {
-              name: `posts`,
-              path: `${__dirname}/posts`,
+                name: `posts`,
+                path: `${__dirname}/posts`,
             },
         },
         {
             resolve: `gatsby-plugin-mdx`,
             options: {
                 extensions: [`.md`, `.mdx`],
+                gatsbyRemarkPlugins: [
+                    {
+                        resolve: `gatsby-remark-prismjs`,
+                        options: {
+                            classPrefix: "language-",
+
+                            // inlineCodeMarker: null,
+
+                            aliases: {},
+
+                            showLineNumbers: false,
+
+                            noInlineHighlight: false,
+                            languageExtensions: [],
+                        },
+                    },
+                ],
             },
         },
         {
             resolve: `gatsby-plugin-typegen`,
             options: {
-                outputPath: 'src/__generated__/gatsby-types.d.ts',
+                outputPath: "src/__generated__/gatsby-types.d.ts",
                 emitSchema: {
-                    'src/__generated__/gatsby-introspection.json': true,
-                    'src/__generated__/gatsby-schema.graphql': true,
+                    "src/__generated__/gatsby-introspection.json": true,
+                    "src/__generated__/gatsby-schema.graphql": true,
                 },
                 emitPluginDocument: {
-                    'src/__generated__/gatsby-plugin-documents.graphql': true,
+                    "src/__generated__/gatsby-plugin-documents.graphql": true,
                 },
             },
         },
         `gatsby-transformer-sharp`,
         `gatsby-plugin-sharp`,
-        `gatsby-remark-prismjs`,
         `gatsby-plugin-postcss`,
         {
             resolve: `gatsby-plugin-google-analytics`,

@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 import { graphql, useStaticQuery } from "gatsby";
 
 export const Footer = () => {
@@ -8,11 +8,11 @@ export const Footer = () => {
             query SiteAuthor {
                 site {
                     siteMetadata {
-                      author {
-                        name
-                      }
+                        author {
+                            name
+                        }
                     }
-                  }
+                }
             }
         `
     );
@@ -25,9 +25,14 @@ export const Footer = () => {
                 <p>
                     {name} © {year}, powered by
                     {` `}
-                    <a href="https://www.gatsbyjs.com">Gatsby</a>
+                    <a
+                        className="text-blue-400 hover:text-blue-800"
+                        href="https://www.gatsbyjs.com"
+                    >
+                        Gatsby
+                    </a>
                 </p>
             </div>
         </footer>
     );
-}
+};

@@ -1,3 +1,1 @@
-export const onCreateNode = ({ node, actions, getNode }) => {
-
-}
+export const onCreateNode = ({ node, actions, getNode }) => {};

@@ -89,9 +89,7 @@ const createTaggedListPage = async ({ graphql, actions, reporter }) => {
     _.each(result.data.allMdx.group, (tag) => {
         createPage({
             path: `/tags/${_.kebabCase(tag.fieldValue)}`,
-            component: path.resolve(
-                "./src/templates/tag-template.tsx"
-            ),
+            component: path.resolve("./src/templates/tag-template.tsx"),
             context: {
                 tag: tag.fieldValue,
             },

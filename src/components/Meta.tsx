@@ -17,7 +17,7 @@ export const Meta = ({
     lang = "en",
     extras = [],
     type = "website",
-    image = ""
+    image = "",
 }: MetaProps) => {
     const { site } = useStaticQuery<GatsbyTypes.SiteMetaQuery>(
         graphql`

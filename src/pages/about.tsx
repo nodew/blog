@@ -17,33 +17,43 @@ export default ({ data }: AboutPageProps) => {
         <Layout activeNavItem="about">
             <div className="max-w-5xl mx-auto">
                 <Meta title="About me" />
-                <h1 className="text-5xl font-bold block text-center mb-14">About me</h1>
+                <h1 className="text-5xl font-bold block text-center mb-14">
+                    About me
+                </h1>
                 <div className="prose xl:prose-xl dark:prose-dark dark:xl:prose-dark-xl max-w-none">
-                    <p>
-                        I'm Qiao Wang, a software engineer living in China. I'm experienced in NodeJS/JavaScript and .NET development and I’ve been working in the field of web development for 6 years.
-                    </p>
+                    <p>I'm Qiao Wang, a software developer living in China.</p>
 
                     <p>
-                        Currently I'm working for Microsoft, on the M365 related products.
+                        I got my bachelor's degree at Xiamen University, majored
+                        in micro-electronics. Currently I'm working for
+                        Microsoft. I'm experienced in NodeJS/JavaScript and .NET
+                        development and I’ve been working in the field of web
+                        development for 6 years.
                     </p>
 
-                    <p>
-                        My favorite languages are Haskell, C# and TypeScript.
-                    </p>
+                    <p>My favorite languages are Haskell, C# and TypeScript.</p>
 
-                    <h2 className="text-center">Find me on</h2>
+                    <h2 className="text-center">Get in touch</h2>
                     <div>
                         <ul className="text-center list-none">
-                            <li><a href={`mailto:${email}`}>{email}</a></li>
-                            <li><a href={`https://${githubUrl}`}>{githubUrl}</a></li>
-                            <li><a href={`https://${twitterUrl}`}>{twitterUrl}</a></li>
+                            <li>
+                                <a href={`mailto:${email}`}>{email}</a>
+                            </li>
+                            <li>
+                                <a href={`https://${githubUrl}`}>{githubUrl}</a>
+                            </li>
+                            <li>
+                                <a href={`https://${twitterUrl}`}>
+                                    {twitterUrl}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </Layout>
     );
-}
+};
 
 export const query = graphql`
     query AboutPage {

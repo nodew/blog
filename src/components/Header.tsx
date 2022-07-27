@@ -6,9 +6,7 @@ export interface HeaderProps {
     activeNavItem?: string;
 }
 
-export const Header = ({
-    activeNavItem = ""
-} : HeaderProps) => {
+export const Header = ({ activeNavItem = "" }: HeaderProps) => {
     const { theme, setTheme } = useContext(ThemeContext);
 
     const icon = theme === "light" ? "/images/moon.svg" : "/images/sunny.svg";
@@ -21,20 +19,38 @@ export const Header = ({
         <header className="text-base mb-14">
             <div className="max-w-5xl flex flex-col lg:flex-row items-center text-center lg:text-left m-auto">
                 <div className="leading-none flex flex-grow items-center">
-                    <div className="block relative typewriter px-2 py-1 font-bold text-xl text-gray-800 dark:text-gray-100">
-                        W :~$
+                    <div className="block select-none py-1 font-bold text-xl text-gray-800 dark:text-gray-100">
+                        <Link to="/">W :~$</Link>
                     </div>
                 </div>
                 <div className="flex flex-row items-center">
                     <nav className="select-none mt-4 lg:mt-0">
                         <ul className="text-xl text-gray-700 dark:text-gray-200 flex">
-                            <li className={`w-24 text-center ${activeNavItem === "home" ? "font-bold" : ""}`}>
+                            <li
+                                className={`w-24 text-center hover:font-semibold ${
+                                    activeNavItem === "home"
+                                        ? "font-bold hover:font-bold"
+                                        : ""
+                                }`}
+                            >
                                 <Link to="/">Home</Link>
                             </li>
-                            <li className={`w-24 text-center ${activeNavItem === "posts" ? "font-bold" : ""}`}>
+                            <li
+                                className={`w-24 text-center hover:font-semibold ${
+                                    activeNavItem === "posts"
+                                        ? "font-bold hover:font-bold"
+                                        : ""
+                                }`}
+                            >
                                 <Link to="/posts">Posts</Link>
                             </li>
-                            <li className={`w-24 text-center ${activeNavItem === "about" ? "font-bold" : ""}`}>
+                            <li
+                                className={`w-24 text-center hover:font-semibold ${
+                                    activeNavItem === "about"
+                                        ? "font-bold hover:font-bold"
+                                        : ""
+                                }`}
+                            >
                                 <Link to="/about">About</Link>
                             </li>
                         </ul>
