@@ -1,0 +1,326 @@
+---
+title: 基于 Generator 和 Iterator 的惰性列表
+date: 2018-08-25
+slug: lazy-list-with-generator-and-iterator
+tags:
+    - JavaScript
+    - Lazy List
+    - Generator
+    - Iterator
+keywords:
+    - Lazy List
+    - Generator
+    - Iterator
+excerpt: "在编程深入到一定领域的时候，惰性求值 (Lazy evaluation) 是绕不开的一部分。在现实中，有各种需求需要我们应对，为了防止可能的溢出情况，我们往往要凭借经验预先去定义一个上界或者下届，在绝大多数情况下，我们的操作是预先开辟大块内存以备不时之需，形成有意而为之的资源浪费。这种时候，引入惰性列表，或者惰性求值策略，可以在特定情况下帮我们节省资源开销，简化我们的复杂代码。本文主要讲述如何通过 ES6 的新特性 - Generator 和 Iterator，实现惰性列表功能。"
+---
+
+## 初识 Lazy List
+
+如果有了解过 Haskell 的朋友，对下面的这些表达一定不陌生
+
+```Haskell
+repeat 1 -- => [1, 1, 1, 1, 1,...]
+cycle "abc" -- => "abcabcabc..."
+[1, 3..] -- => [1, 3, 5, 7, ...]
+```
+
+上面的几个表达式产生的都是无限列表。对于习惯了主流编程语言的朋友可能感到困惑，在有限的内存里面如何能表达无限的概念。主要的原因就是 Haskell 是一门默认采用惰性求值策略的语言，没有用到的部分，在内存里面只是一个表达式，并不会真正的去做计算。
+
+如果只看上面的几个表达式，很多朋友可能会说，也没感觉到有什么神奇的地方，似乎并没有什么作用。我们再看看下面的代码。
+
+Haskell 中的 `fibonacci` 数列：
+
+```Haskell
+fibonacci = 1 : 1 : zipWith (+) fibonacci (tail fibonacci)
+```
+
+这里 `fibonacci` 本身是一个惰性结构，所以在计算的时候，会先算出列表前面的两个 1，得到 `1 : 1...` 这样的结构，然后怎么表达 `fibonacci` 的 `fib(n) = fib(n - 1) + fib(n - 2)` 特性呢？我们可以注意到，`n - 1`和 `n - 2` 刚好在数列中相差一位，所以 `n` 可以看作是该数列错位的相加的结果。
+
+我们再来看一则[筛法求素数](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)。不熟悉筛法的可以先点开 wiki 去看一下该算法的思路。下面这段代码是 Haskell 的一个简单实现。
+
+```Haskell
+primes = 2 : filter isPrime [3, 5..]
+  where
+    isPrime x = all (\p -> x `mod` p > 0) (takeWhile (\p -> p * p <= x) primes)
+```
+
+## So, Why Lazy?
+
+在某些不定长度的列表操作上，惰性列表会让代码和结构更灵活。用上面的 `primes` 列表举个例子好了，在传统的 C 语言或者 Java 的实现里面，我们一般要先声明一个最大长度或者一个最大的取值范围，比如 10000 以内的素数。如果后面的计算要用到超过这个范围，我们就不得不重新调用生成函数，重新生成一份更长的列表。这里面的问题是：一、要主动去调用这个工厂函数，二、如果要复用已经计算出来的数据，手动去维护一个 cache 列表，势必增加代码的复杂度。另外一个可能的情况是，我们预先生成了一份很长的列表，后面的计算中只用到了列表头部的一丢丢数据，这也是极大的浪费。
+
+惰性列表的使用增加了我们编程的表达能力，让我们可以更关注数据结构本身的特性，而不是浪费时间在如何去管理堆栈上面。因为，惰性求值特性保证我们在需要一个值的时候才会去计算，所以可以自动地最小化我们的计算量，节约资源。
+
+比如我们可以通过 lazy byteString 去读、写文件，它本身不会把整个文件加载到我们的内存里面，而是按需的读取。有的时候我们读一个大文件，可能只筛选出需要的前几十条数据，却确不得不把几百 M 甚至上 G 的大文件整个的放到内存里面。
+
+这里也找到一篇 14 年的文章 [How to Speed Up Lo-Dash ×100? Introducing Lazy Evaluation](http://filimanjaro.com/blog/2014/introducing-lazy-evaluation/)，感兴趣的可以点开看看。
+
+## 在 JavaScript 中实现 Lazy List
+
+在 JavaScript 有没有惰性结构呢？先看下面这个例子。
+
+```TypeScript
+let fetchSomething = fetch('/some/thing');
+if (condition) {
+  fetchSomething = fetch('/some/thing/condition');
+}
+fetchSomething.then(() => {
+  // TODO
+});
+```
+
+`fetch` 方法本身是立即执行的，如果满足条件，这里的 `fetch` 方法会执行两次。这并不是我们期待的行为，这里需要让这个 `fetch` 的动作在我们需要的时候才去执行，而不是声明的时候就开始执行的话，通常的做法是把它改成下面的样子。
+
+```TypeScript
+let fetchSomething = () => fetch('/some/thing');
+if (condition) {
+  fetchSomething = () = fetch('/some/thing/condition');
+}
+fetchSomething.then(() => {
+  // TODO
+});
+```
+
+由此启发，我们大致可以实现如下的结构。
+
+```TypeScript
+class List<T> {
+  head: T | () => T
+  tail: List<T> | () => List<T>
+
+  constructor(head: T, tail: () => List<T>) {
+    this.head = () => head;
+    this.tail = tail;
+  }
+}
+```
+
+`List<T>` 本质上是一个单链表，构造函数里面传入的 tail 是一个工厂函数，用来构建新的 List 节点。只有在我们访问到一个节点的时候，才对它的 head 求值，访问它的下一个节点的时候对 tail 求值，不然 head 和 tail 都只是待求值的表达式。
+
+这种方式看起来似乎已经解决了我的问题，但是这种结构在和普通的 Array 做互相转换的时候，存在大量不必要的额外开销。
+
+那 JavaScript 中有没有更天然的结构，可以让我们免于去构造这样一个复杂的对象，简化代码的同时，让我们的代码更具有普适性呢？
+
+### 初识 Iterable
+
+ES6 的新特性给了我想要的答案，[Iteration Protocols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols)。如果嫌 MDN 的描述太长，可以直接看下面等价的类型声明。
+
+```TypeScript
+interface Iterable<T> {
+  [Symbol.iterator](): Iterator<T>;
+}
+
+interface Iterator<T> {
+  next(): IteratorResult<T>;
+}
+
+interface IteratorResult<T> {
+  done: Boolean;
+  value?: T;
+}
+
+interface IterableIterator<T> {
+  [Symbol.iterator](): Iterator<T>;
+  next(): IteratorResult<T>;
+}
+```
+
+所有实现一个 Iterable 接口的对象都可以通过诸如 `for...of...`、`...itor` 以及 `Array.from` 来访问，当 next 方法的返回值中 done 为 true 时，迭代结束。而且只有我们访问 next 方法时，才会进入下一步迭代，是理想的 Lazy 结构。
+
+这时候我们看一下我们的 fibonacci 该怎么写？
+
+```TypeScript
+class Fibonacci implements IterableIterator<number> {
+  private prev = 1;
+  private next = 1;
+
+  public next() {
+    let current = this.prev;
+    this.prev = this.next;
+    this.next = current + this.prev;
+    return {
+      done: false,
+      value: current
+    }
+  }
+
+  [Symbol.iterator]() {
+    return this;
+  }
+}
+
+const fib = new Fibonacci();
+fib.next() // => { done: false, value: 1 }
+fib.next() // => { done: false, value: 1 }
+fib.next() // => { done: false, value: 2 }
+// etc
+```
+
+到这里，我们已经可以表达一个惰性的无限数列了。但是上面的代码毕竟过于繁琐，好在 ES6 同时给我们提供了 Generator, 可以让我们很方便地书写 IterableItorator，从某种意义上来讲，Generator 可以说是上面代码的语法糖。
+
+使用 Generator，上面的代码可以简化成下面的样子。
+
+```TypeScript
+export function* fibonacci() {
+  let prev = 1;
+  let next = 1;
+
+  while (true) {
+    yield prev;
+    const temp = prev;
+    prev = next;
+    next = temp + prev;
+  }
+}
+
+const fib = fibonacci();
+// etc
+```
+
+这里不再去花段落介绍 Generator 的语法，不了解的同学可以先去阅读下这篇文章 [A Simple Guide to Understanding Javascript (ES6) Generators](https://medium.com/dailyjs/a-simple-guide-to-understanding-javascript-es6-generators-d1c350551950)。
+
+### 定义 Infinite List
+
+接着上面的代码往下写，下面的代码分别实现了文章开头的 repeat, cycle, iterate, range 等方法。
+
+```TypeScript
+export function* repeat<T>(item: T) {
+  while (true) {
+    yield item;
+  }
+}
+
+export function* cycle<T>(items: Iterable<T>) {
+  while (true) {
+    yield* [...items];
+  }
+}
+
+export function* iterate<T>(fn: (value: T) => T, initial: T) {
+  let val = initial;
+  while (true) {
+    yield val;
+    val = fn(val);
+  }
+}
+
+export function* range(start: number, end = Infinity, step = 1) {
+  while (start <= end) {
+    yield start;
+    start += step;
+  }
+}
+```
+
+可以看到，代码是非常直观且易于理解的。
+
+### 定义 Operator
+
+有了列表之后，我们需要在列表之上进行操作，下面的代码分别实现了 map/filter/take/takeWhile 方法。
+
+```TypeScript
+export function* map<T, U>(fn: (value: T) => U, items: Iterable<T>) {
+  for (let item of items) {
+    yield fn(item);
+  }
+}
+
+export function* filter<T>(
+  predicate: (value: T) => boolean,
+  items: Iterable<T>
+) {
+  for (let item of items) {
+    if (predicate(item)) {
+      yield item;
+    }
+  }
+}
+
+export function* take<T>(n: number, items: Iterable<T>) {
+  let i = 0;
+  if (n < 1) return;
+
+  for (let item of items) {
+    yield item;
+    i++;
+    if (i >= n) {
+      return;
+    }
+  }
+}
+
+function* takeWhile<T>(
+  predicate: (value: T) => boolean,
+  items: Iterable<T>
+) {
+  for (let item of items) {
+    if (predicate(item)) {
+      yield item;
+    } else {
+      return;
+    }
+  }
+}
+```
+
+上面的代码都是比较简单的。比较难一点的是去实现 `zip` 方法，即怎么把两个列表合并成一个？
+
+难点在于接收一个 Iterable 的对象的话，本身并不一定要实现 `next` 方法的，比如 Array、String 等，同时 Iterable 对象也并不是都可以通过 index 来访问的。此外，如果想先通过 Array.from 变成数组，然后在数组上进行操作，我们会遇到一个情况是我们传入的 Iterable 对象是无限的，如上文的 fibonacci 一样，这种情况下是不能使用 Array.from 的。
+
+这时候我的一个思路是需要想办法把一个 Iterable 的对象提升成为 IterableItorator 对象，然后通过 next 方法，逐一遍历。
+
+How？幸好 Generator 给我们提供了一个 `yield*` 操作符，可以让我们方便的定义出一个 `lift` 方法。
+
+```TypeScript
+export function* lift<T>(items: Iterable<T>): IterableIterator<T> {
+  yield* items;
+}
+```
+
+有了这个 `lift` 方法之后，就可以很方便的书写 `zip` 方法和 `zipWith` 方法了。
+
+```TypeScript
+export function* zip<T, G>(
+  seqA: Iterable<T>,
+  seqB: Iterable<G>
+): IterableIterator<[T, G]> {
+  const itorA = lift(seqA);
+  const itorB = lift(seqB);
+  let valA = itorA.next();
+  let valB = itorB.next();
+  while (!valA.done || !valB.done) {
+    yield [valA.value, valB.value];
+    valA = itorA.next();
+    valB = itorB.next();
+  }
+}
+
+export function* zipWith<T, G, R>(
+  fn: (a: T, b: G) => R,
+  seqA: Iterable<T>,
+  seqB: Iterable<G>
+): IterableIterator<R> {
+  const itorA = lift(seqA);
+  const itorB = lift(seqB);
+  let valA = itorA.next();
+  let valB = itorB.next();
+  while (!valA.done || !valB.done) {
+    yield fn(valA.value, valB.value);
+    valA = itorA.next();
+    valB = itorB.next();
+  }
+}
+```
+
+更多的方法可以去底部的点开我的 repo，这里就不一一列举了。
+
+## 结语
+
+Generator 和 Iterator 是 ES6 带给我们的非常强大的语言层面的能力，它本身的求值可以看作是惰性的。
+
+差不多在 13 年左右，TJ 的 [co](https://github.com/tj/co) 刚出来的时候，其代码的短小精悍可以说是相当惊艳的。然而在我们的使用中，一来受限于浏览器兼容性，二来受限于我们的使用场景，个人认为我们对其特性开发得还远远不够。结合 IO、network，Generator 和 Iterator 还能为我们做更多的事情。
+
+另外，需要特别说明的是，虽然这篇文章通篇是在讲惰性列表，但是惰性列表并不是银弹，相反的，惰性结构的滥用会在程序的执行过程中缓存大量的 thunk，增大在内存上的开销。
+
+完整代码请移步 [GitHub](https://github.com/nodew/lazyList)。
+
+本文首发于[有赞技术博客](https://tech.youzan.com/lazy-list-with-generator-and-iterator/)。

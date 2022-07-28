@@ -1,45 +1,76 @@
 import * as React from "react";
-import { graphql } from "gatsby";
-import Layout from "../components/Layout";
-import Post from "../components/Post";
-import { useSiteMetadata } from "../hooks";
-import { MarkdownRemark } from "../types";
+import { Link, graphql } from "gatsby";
+import { MDXRenderer } from "gatsby-plugin-mdx";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
+import _ from "lodash";
 
-interface Props {
-  data: {
-    markdownRemark: MarkdownRemark;
-  };
+import Layout from "../components/Layout";
+import { Meta } from "../components/Meta";
+import { TagIcon } from "../components/TagIcon";
+
+dayjs.extend(localizedFormat);
+
+interface PostItemTemplateProps {
+    data: GatsbyTypes.PostItemQuery;
 }
 
-const PostTemplate = ({ data }: Props) => {
-  const { title: siteTitle, subtitle: siteSubtitle } = useSiteMetadata();
-  const { title: postTitle, description: postDescription, keywords } = data.markdownRemark.frontmatter;
-  const metaDescription = postDescription !== null ? postDescription : siteSubtitle;
-
-  return (
-    <Layout title={`${postTitle} - ${siteTitle}`} description={metaDescription} keywords={keywords}>
-      <Post post={data.markdownRemark} />
-    </Layout>
-  );
+export default ({ data }: PostItemTemplateProps) => {
+    return (
+        <Layout>
+            <div className="max-w-5xl mx-auto">
+                <Meta
+                    title={data.post!.frontmatter!.title}
+                    description={data.post!.frontmatter!.excerpt || ""}
+                    type="article"
+                    extras={[
+                        {
+                            name: "keywords",
+                            content:
+                                data.post!.frontmatter!.keywords!.join(","),
+                        },
+                    ]}
+                />
+                <div className="prose xl:prose-xl dark:prose-dark dark:xl:prose-dark-xl max-w-none">
+                    <h1 className="mb-0 xl:mb-2">
+                        {data.post?.frontmatter?.title}
+                    </h1>
+                    <ul className="list-none flex flex-wrap p-0 xl:p-0 my-0 xl:my-0">
+                        {data.post!.frontmatter!.tags!.map((tag) => (
+                            <li key={tag} className="flex-none ml-0 mr-4">
+                                <Link to={`/tags/${_.kebabCase(tag || "")}`}>
+                                    <div className="flex flex-row items-center">
+                                        <TagIcon />
+                                        <span className="ml-1">{tag}</span>
+                                    </div>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                    <div className="text-gray-400 dark:text-gray-700 italic mb-12">
+                        {dayjs(data.post?.frontmatter!.date).format("LL")}
+                    </div>
+                    <MDXRenderer>{data.post!.body}</MDXRenderer>
+                </div>
+            </div>
+        </Layout>
+    );
 };
 
 export const query = graphql`
-  query PostBySlug($slug: String!) {
-    markdownRemark(fields: { slug: { eq: $slug } }) {
-      id
-      html
-      fields {
-        slug
-        tagSlugs
-      }
-      frontmatter {
-        date
-        description
-        tags
-        title
-      }
+    query PostItem($id: String!) {
+        post: mdx(id: { eq: $id }) {
+            id
+            slug
+            body
+            frontmatter {
+                date
+                excerpt
+                keywords
+                slug
+                tags
+                title
+            }
+        }
     }
-  }
 `;
-
-export default PostTemplate;

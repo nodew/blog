@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.token.operator {
+    background: none;
+}
+
+.dark .dark\:prose-dark .gatsby-highlight :where(pre):not(:where([class~="not-prose"] *)) {
+    padding: 1em;
+    margin: .5em 0;
+}

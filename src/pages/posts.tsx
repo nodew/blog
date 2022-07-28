@@ -1,34 +1,25 @@
-import * as React from "react";
+import React from "react";
 import { graphql, Link } from "gatsby";
-import _ from "lodash";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import Layout from "../components/Layout";
 import { Meta } from "../components/Meta";
-import { TagIcon } from "../components/TagIcon";
 
 dayjs.extend(localizedFormat);
 
-interface TaggedPostsPageProps {
-    data: GatsbyTypes.PostsByTagQuery;
-    pageContext: {
-        tag: string;
-    };
+interface PostsPageProps {
+    data: GatsbyTypes.PostsPageQuery;
 }
 
-export default ({ data, pageContext }: TaggedPostsPageProps) => {
+export default ({ data }: PostsPageProps) => {
     return (
-        <Layout>
+        <Layout activeNavItem="posts">
             <div className="max-w-5xl mx-auto">
-                <Meta title={`Tag - ${pageContext.tag}`} />
-                <h1 className="text-2xl font-bold block mb-8 mt-12 flex items-center">
-                    <TagIcon />
-                    <span className="ml-2">{pageContext.tag}</span>
-                </h1>
+                <Meta title="Posts" />
                 <ul>
                     {data.posts.nodes.map((post) => (
-                        <li key={post.id} className="text-base mb-4">
+                        <li key={post.id} className="text-base mb-6">
                             <div className="text-2xl">
                                 <Link
                                     to={`/posts/${
@@ -41,6 +32,9 @@ export default ({ data, pageContext }: TaggedPostsPageProps) => {
                             <div className="text-gray-400 dark:text-gray-700 italic">
                                 {dayjs(post.frontmatter!.date).format("LL")}
                             </div>
+                            <div className="text-gray-600 mt-2 dark:text-gray-400">
+                                {post.frontmatter!.excerpt}
+                            </div>
                         </li>
                     ))}
                 </ul>
@@ -50,17 +44,19 @@ export default ({ data, pageContext }: TaggedPostsPageProps) => {
 };
 
 export const query = graphql`
-    query PostsByTag($tag: String) {
+    query PostsPage {
         posts: allMdx(
-            filter: { frontmatter: { tags: { in: [$tag] } } }
-            sort: { order: DESC, fields: [frontmatter___date] }
+            limit: 3
+            sort: { fields: [frontmatter___date], order: DESC }
         ) {
             nodes {
                 id
+
                 frontmatter {
                     slug
                     title
                     date
+                    excerpt
                 }
             }
         }
