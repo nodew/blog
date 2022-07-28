@@ -1,0 +1,7 @@
+{
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": true,
+    "singleQuote": false,
+    "filepath": "./{src,gatsby}/**/*.{js,jsx,ts,tsx,md,mdx}"
+}

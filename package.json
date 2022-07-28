@@ -9,7 +9,7 @@
         "serve": "gatsby serve",
         "clean": "gatsby clean",
         "deploy": "yarn run clean && gatsby build --prefix-paths && gh-pages --add --dist public",
-        "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,md}\""
+        "format": "prettier --write **/*.{js,jsx,ts,tsx,md,mdx}"
     },
     "repository": {
         "type": "git",

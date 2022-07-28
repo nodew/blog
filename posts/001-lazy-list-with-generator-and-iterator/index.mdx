@@ -3,14 +3,14 @@ title: 基于 Generator 和 Iterator 的惰性列表
 date: 2018-08-25
 slug: lazy-list-with-generator-and-iterator
 tags:
-  - JavaScript
-  - Lazy List
-  - Generator
-  - Iterator
+    - JavaScript
+    - Lazy List
+    - Generator
+    - Iterator
 keywords:
-  - Lazy List
-  - Generator
-  - Iterator
+    - Lazy List
+    - Generator
+    - Iterator
 excerpt: "在编程深入到一定领域的时候，惰性求值 (Lazy evaluation) 是绕不开的一部分。在现实中，有各种需求需要我们应对，为了防止可能的溢出情况，我们往往要凭借经验预先去定义一个上界或者下届，在绝大多数情况下，我们的操作是预先开辟大块内存以备不时之需，形成有意而为之的资源浪费。这种时候，引入惰性列表，或者惰性求值策略，可以在特定情况下帮我们节省资源开销，简化我们的复杂代码。本文主要讲述如何通过 ES6 的新特性 - Generator 和 Iterator，实现惰性列表功能。"
 ---
 
@@ -34,7 +34,7 @@ Haskell 中的 `fibonacci` 数列：
 fibonacci = 1 : 1 : zipWith (+) fibonacci (tail fibonacci)
 ```
 
-这里 `fibonacci` 本身是一个惰性结构，所以在计算的时候，会先算出列表前面的两个1，得到 `1 : 1...` 这样的结构，然后怎么表达 `fibonacci` 的 `fib(n) = fib(n - 1) + fib(n - 2)` 特性呢？我们可以注意到，`n - 1`和 `n - 2` 刚好在数列中相差一位，所以 `n` 可以看作是该数列错位的相加的结果。
+这里 `fibonacci` 本身是一个惰性结构，所以在计算的时候，会先算出列表前面的两个 1，得到 `1 : 1...` 这样的结构，然后怎么表达 `fibonacci` 的 `fib(n) = fib(n - 1) + fib(n - 2)` 特性呢？我们可以注意到，`n - 1`和 `n - 2` 刚好在数列中相差一位，所以 `n` 可以看作是该数列错位的相加的结果。
 
 我们再来看一则[筛法求素数](https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes)。不熟悉筛法的可以先点开 wiki 去看一下该算法的思路。下面这段代码是 Haskell 的一个简单实现。
 
@@ -46,13 +46,13 @@ primes = 2 : filter isPrime [3, 5..]
 
 ## So, Why Lazy?
 
-在某些不定长度的列表操作上，惰性列表会让代码和结构更灵活。用上面的 `primes` 列表举个例子好了，在传统的 C 语言或者 Java 的实现里面，我们一般要先声明一个最大长度或者一个最大的取值范围，比如 10000 以内的素数。如果后面的计算要用到超过这个范围，我们就不得不重新调用生成函数，重新生成一份更长的列表。这里面的问题是：一、要主动去调用这个工厂函数，二、如果要复用已经计算出来的数据，手动去维护一个cache列表，势必增加代码的复杂度。另外一个可能的情况是，我们预先生成了一份很长的列表，后面的计算中只用到了列表头部的一丢丢数据，这也是极大的浪费。
+在某些不定长度的列表操作上，惰性列表会让代码和结构更灵活。用上面的 `primes` 列表举个例子好了，在传统的 C 语言或者 Java 的实现里面，我们一般要先声明一个最大长度或者一个最大的取值范围，比如 10000 以内的素数。如果后面的计算要用到超过这个范围，我们就不得不重新调用生成函数，重新生成一份更长的列表。这里面的问题是：一、要主动去调用这个工厂函数，二、如果要复用已经计算出来的数据，手动去维护一个 cache 列表，势必增加代码的复杂度。另外一个可能的情况是，我们预先生成了一份很长的列表，后面的计算中只用到了列表头部的一丢丢数据，这也是极大的浪费。
 
 惰性列表的使用增加了我们编程的表达能力，让我们可以更关注数据结构本身的特性，而不是浪费时间在如何去管理堆栈上面。因为，惰性求值特性保证我们在需要一个值的时候才会去计算，所以可以自动地最小化我们的计算量，节约资源。
 
 比如我们可以通过 lazy byteString 去读、写文件，它本身不会把整个文件加载到我们的内存里面，而是按需的读取。有的时候我们读一个大文件，可能只筛选出需要的前几十条数据，却确不得不把几百 M 甚至上 G 的大文件整个的放到内存里面。
 
-这里也找到一篇14年的文章 [How to Speed Up Lo-Dash ×100? Introducing Lazy Evaluation](http://filimanjaro.com/blog/2014/introducing-lazy-evaluation/)，感兴趣的可以点开看看。
+这里也找到一篇 14 年的文章 [How to Speed Up Lo-Dash ×100? Introducing Lazy Evaluation](http://filimanjaro.com/blog/2014/introducing-lazy-evaluation/)，感兴趣的可以点开看看。
 
 ## 在 JavaScript 中实现 Lazy List
 
@@ -102,7 +102,7 @@ class List<T> {
 
 ### 初识 Iterable
 
-ES6 的新特性给了我想要的答案，[Iteration Protocols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols)。如果嫌MDN的描述太长，可以直接看下面等价的类型声明。
+ES6 的新特性给了我想要的答案，[Iteration Protocols](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols)。如果嫌 MDN 的描述太长，可以直接看下面等价的类型声明。
 
 ```TypeScript
 interface Iterable<T> {
@@ -124,7 +124,7 @@ interface IterableIterator<T> {
 }
 ```
 
-所有实现一个Iterable接口的对象都可以通过诸如 `for...of...`、`...itor` 以及 `Array.from` 来访问，当next方法的返回值中done为true时，迭代结束。而且只有我们访问next方法时，才会进入下一步迭代，是理想的Lazy结构。
+所有实现一个 Iterable 接口的对象都可以通过诸如 `for...of...`、`...itor` 以及 `Array.from` 来访问，当 next 方法的返回值中 done 为 true 时，迭代结束。而且只有我们访问 next 方法时，才会进入下一步迭代，是理想的 Lazy 结构。
 
 这时候我们看一下我们的 fibonacci 该怎么写？
 
@@ -157,7 +157,7 @@ fib.next() // => { done: false, value: 2 }
 
 到这里，我们已经可以表达一个惰性的无限数列了。但是上面的代码毕竟过于繁琐，好在 ES6 同时给我们提供了 Generator, 可以让我们很方便地书写 IterableItorator，从某种意义上来讲，Generator 可以说是上面代码的语法糖。
 
-使用Generator，上面的代码可以简化成下面的样子。
+使用 Generator，上面的代码可以简化成下面的样子。
 
 ```TypeScript
 export function* fibonacci() {
@@ -261,9 +261,10 @@ function* takeWhile<T>(
   }
 }
 ```
+
 上面的代码都是比较简单的。比较难一点的是去实现 `zip` 方法，即怎么把两个列表合并成一个？
 
-难点在于接收一个 Iterable 的对象的话，本身并不一定要实现 `next` 方法的，比如 Array、String 等，同时Iterable对象也并不是都可以通过 index 来访问的。此外，如果想先通过Array.from变成数组，然后在数组上进行操作，我们会遇到一个情况是我们传入的 Iterable 对象是无限的，如上文的 fibonacci 一样，这种情况下是不能使用 Array.from 的。
+难点在于接收一个 Iterable 的对象的话，本身并不一定要实现 `next` 方法的，比如 Array、String 等，同时 Iterable 对象也并不是都可以通过 index 来访问的。此外，如果想先通过 Array.from 变成数组，然后在数组上进行操作，我们会遇到一个情况是我们传入的 Iterable 对象是无限的，如上文的 fibonacci 一样，这种情况下是不能使用 Array.from 的。
 
 这时候我的一个思路是需要想办法把一个 Iterable 的对象提升成为 IterableItorator 对象，然后通过 next 方法，逐一遍历。
 
@@ -316,9 +317,9 @@ export function* zipWith<T, G, R>(
 
 Generator 和 Iterator 是 ES6 带给我们的非常强大的语言层面的能力，它本身的求值可以看作是惰性的。
 
-差不多在13年左右，TJ 的 [co](https://github.com/tj/co) 刚出来的时候，其代码的短小精悍可以说是相当惊艳的。然而在我们的使用中，一来受限于浏览器兼容性，二来受限于我们的使用场景，个人认为我们对其特性开发得还远远不够。结合 IO、network，Generator 和 Iterator 还能为我们做更多的事情。
+差不多在 13 年左右，TJ 的 [co](https://github.com/tj/co) 刚出来的时候，其代码的短小精悍可以说是相当惊艳的。然而在我们的使用中，一来受限于浏览器兼容性，二来受限于我们的使用场景，个人认为我们对其特性开发得还远远不够。结合 IO、network，Generator 和 Iterator 还能为我们做更多的事情。
 
-另外，需要特别说明的是，虽然这篇文章通篇是在讲惰性列表，但是惰性列表并不是银弹，相反的，惰性结构的滥用会在程序的执行过程中缓存大量的thunk，增大在内存上的开销。
+另外，需要特别说明的是，虽然这篇文章通篇是在讲惰性列表，但是惰性列表并不是银弹，相反的，惰性结构的滥用会在程序的执行过程中缓存大量的 thunk，增大在内存上的开销。
 
 完整代码请移步 [GitHub](https://github.com/nodew/lazyList)。
 
