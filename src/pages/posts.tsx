@@ -16,24 +16,25 @@ export default ({ data }: PostsPageProps) => {
     return (
         <Layout activeNavItem="posts">
             <div className="max-w-5xl mx-auto">
-                <Meta title="Posts" />
+                <Meta title="All posts" />
+                <h1 className="text-3xl font-bold block mb-8 mt-12">All posts</h1>
                 <ul>
-                    {data.posts.nodes.map((post) => (
-                        <li key={post.id} className="text-base mb-6">
+                    {data.posts.edges.map(item => item.node.childMdx).map((post) => (
+                        <li key={post!.id} className="text-base mb-8">
                             <div className="text-2xl">
                                 <Link
                                     to={`/posts/${
-                                        post.frontmatter!.slug || ""
+                                        post!.frontmatter!.slug || ""
                                     }`}
                                 >
-                                    {post.frontmatter!.title}
+                                    {post!.frontmatter!.title}
                                 </Link>
                             </div>
                             <div className="text-gray-400 dark:text-gray-700 italic">
-                                {dayjs(post.frontmatter!.date).format("LL")}
+                                {dayjs(post!.frontmatter!.date).format("LL")}
                             </div>
                             <div className="text-gray-600 mt-2 dark:text-gray-400">
-                                {post.frontmatter!.excerpt}
+                                {post!.frontmatter!.excerpt}
                             </div>
                         </li>
                     ))}
@@ -45,18 +46,21 @@ export default ({ data }: PostsPageProps) => {
 
 export const query = graphql`
     query PostsPage {
-        posts: allMdx(
-            limit: 3
-            sort: { fields: [frontmatter___date], order: DESC }
+        posts: allFile(
+            sort: { order: DESC, fields: childMdx___frontmatter___date }
+            filter: { sourceInstanceName: { eq: "posts" } }
         ) {
-            nodes {
-                id
-
-                frontmatter {
-                    slug
-                    title
-                    date
-                    excerpt
+            edges {
+                node {
+                    childMdx {
+                        id
+                        frontmatter {
+                            slug
+                            title
+                            date
+                            excerpt
+                        }
+                    }
                 }
             }
         }

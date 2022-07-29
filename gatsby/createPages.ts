@@ -11,22 +11,29 @@ const createPostItemPage = async ({ graphql, actions, reporter }) => {
 
     const result = await graphql(`
         query PostItems {
-            allMdx(
-                sort: { order: DESC, fields: frontmatter___date }
-                limit: 1000
+            allFile(
+                sort: { order: DESC, fields: childMdx___frontmatter___date }
+                filter: { sourceInstanceName: { eq: "posts" } }
             ) {
                 edges {
                     node {
-                        id
-                        frontmatter {
-                            slug
+                        childMdx {
+                            id
+                            frontmatter {
+                                date
+                                slug
+                            }
+                        }
+                    }
+                    previous {
+                        childMdx {
+                            id
                         }
                     }
                     next {
-                        id
-                    }
-                    previous {
-                        id
+                        childMdx {
+                            id
+                        }
                     }
                 }
             }
@@ -41,15 +48,16 @@ const createPostItemPage = async ({ graphql, actions, reporter }) => {
         return;
     }
 
-    const posts = result.data.allMdx.edges;
+    const items = result.data.allFile.edges;
 
-    if (posts.length > 0) {
-        posts.forEach((post: any, index: number) => {
-            const postId = post.node.id;
-            const slug = post.node.frontmatter.slug;
+    if (items.length > 0) {
+        items.forEach((item: any) => {
+            const post = item.node.childMdx;
+            const postId = post.id;
+            const slug = post.frontmatter.slug;
 
-            const previousPostId = post.previous?.id;
-            const nextPostId = post.next?.id;
+            const previousPostId = item.previous?.childMdx?.id;
+            const nextPostId = item.next?.childMdx?.id;
 
             createPage({
                 path: `/posts/${slug}`,
