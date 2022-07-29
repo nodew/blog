@@ -27,6 +27,10 @@ export const createSchemaCustomization = ({ actions }) => {
             slug: String
             tags: [String]
             keywords: [String]
+
+            name: String
+            projectUrl: String
+            pinToHomePage: Boolean
         }
     `);
 };

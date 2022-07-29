@@ -14,7 +14,7 @@ export default ({ data }: TagsPageProps) => {
         <Layout>
             <div className="max-w-5xl mx-auto">
                 <Meta title="Tags" />
-                <h1 className="text-2xl font-bold block mb-8 mt-12">Tags</h1>
+                <h1 className="text-3xl font-bold block mb-8 mt-12">Tags</h1>
                 <ul>
                     {data.tags.group.map((tag: any) => (
                         <li className="float-left mr-6 my-2 font-semibold">

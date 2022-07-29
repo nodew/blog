@@ -7,6 +7,7 @@ dayjs.extend(localizedFormat);
 
 import { Layout } from "../components/Layout";
 import { Meta } from "../components/Meta";
+import { MDXRenderer } from "gatsby-plugin-mdx";
 
 interface HomePageProps {
     data: GatsbyTypes.HomePageQuery;
@@ -39,22 +40,46 @@ export default ({ data }: HomePageProps) => {
                         .
                     </div>
                     <ul className="mt-4">
-                        {data.posts.nodes.map((post) => (
-                            <li key={post.id} className="text-base mb-4">
-                                <div className="text-2xl">
-                                    <Link
-                                        to={`/posts/${
-                                            post.frontmatter!.slug || ""
-                                        }`}
-                                    >
-                                        {post.frontmatter!.title}
-                                    </Link>
-                                </div>
-                                <div className="text-gray-400 dark:text-gray-700 italic">
-                                    {dayjs(post.frontmatter!.date).format("LL")}
-                                </div>
-                            </li>
-                        ))}
+                        {data.posts.edges
+                            .map((item) => item.node.childMdx)
+                            .map((post) => (
+                                <li key={post!.id} className="text-base mb-6">
+                                    <div className="text-2xl">
+                                        <Link
+                                            to={`/posts/${
+                                                post!.frontmatter!.slug || ""
+                                            }`}
+                                        >
+                                            {post!.frontmatter!.title}
+                                        </Link>
+                                    </div>
+                                    <div className="text-gray-400 dark:text-gray-700 italic">
+                                        {dayjs(post!.frontmatter!.date).format(
+                                            "LL"
+                                        )}
+                                    </div>
+                                </li>
+                            ))}
+                    </ul>
+                </div>
+
+                <div className="mt-16">
+                    <h2 className="text-3xl font-bold block mb-4">Projects</h2>
+                    <ul className="mt-4">
+                        {data.projects.nodes
+                            .map((item) => item.childMdx)
+                            .map((post) => (
+                                <li key={post!.id} className="text-base mb-6">
+                                    <div className="text-2xl font-semibold">
+                                        <a href={post!.frontmatter!.projectUrl || ""}>
+                                            {post!.frontmatter!.name}
+                                        </a>
+                                    </div>
+                                    <div className="text-gray-600 mt-2 dark:text-gray-400">
+                                        <MDXRenderer>{post!.body}</MDXRenderer>
+                                    </div>
+                                </li>
+                            ))}
                     </ul>
                 </div>
             </div>
@@ -64,17 +89,39 @@ export default ({ data }: HomePageProps) => {
 
 export const query = graphql`
     query HomePage {
-        posts: allMdx(
-            limit: 3
-            sort: { fields: [frontmatter___date], order: DESC }
+        posts: allFile(
+            filter: { sourceInstanceName: { eq: "posts" } }
+            sort: { order: DESC, fields: childMdx___frontmatter___date }
+        ) {
+            edges {
+                node {
+                    childMdx {
+                        id
+                        frontmatter {
+                            slug
+                            title
+                            date
+                        }
+                    }
+                }
+            }
+        }
+
+        projects: allFile(
+            filter: {
+                sourceInstanceName: { eq: "projects" }
+                childMdx: { frontmatter: { pinToHomePage: { eq: true } } }
+            }
+            sort: { order: ASC, fields: childMdx___frontmatter___name }
         ) {
             nodes {
-                id
-
-                frontmatter {
-                    slug
-                    title
-                    date
+                childMdx {
+                    id
+                    body
+                    frontmatter {
+                        name
+                        projectUrl
+                    }
                 }
             }
         }

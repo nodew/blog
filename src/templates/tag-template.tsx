@@ -22,7 +22,7 @@ export default ({ data, pageContext }: TaggedPostsPageProps) => {
         <Layout>
             <div className="max-w-5xl mx-auto">
                 <Meta title={`Tag - ${pageContext.tag}`} />
-                <h1 className="text-2xl font-bold block mb-8 mt-12 flex items-center">
+                <h1 className="text-3xl font-bold block mb-8 mt-12 flex items-center">
                     <TagIcon />
                     <span className="ml-2">{pageContext.tag}</span>
                 </h1>

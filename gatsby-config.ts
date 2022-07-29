@@ -31,6 +31,13 @@ const config: GatsbyConfig = {
             },
         },
         {
+            resolve: `gatsby-source-filesystem`,
+            options: {
+                name: `projects`,
+                path: `${__dirname}/projects`,
+            },
+        },
+        {
             resolve: `gatsby-plugin-mdx`,
             options: {
                 extensions: [`.md`, `.mdx`],
