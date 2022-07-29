@@ -23,8 +23,10 @@ export const Footer = () => {
         <footer className="text-base mt-32 text-gray-400 dark:text-gray-600">
             <div className="max-w-5xl text-center m-auto">
                 <p>
-                    {name} © {year}, powered by
-                    {` `}
+                    © {year} • WANGQIAO.ME • ALL RIGHTS RESERVED
+                </p>
+                <p>
+                    Powered by {` `}
                     <a
                         className="text-blue-400 hover:text-blue-800"
                         href="https://www.gatsbyjs.com"
