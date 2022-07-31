@@ -20,7 +20,7 @@ export const Header = ({ activeNavItem = "" }: HeaderProps) => {
             <div className="max-w-5xl flex flex-col lg:flex-row items-center text-center lg:text-left m-auto">
                 <div className="leading-none flex flex-grow items-center">
                     <div className="block select-none py-1 font-bold text-xl text-gray-800 dark:text-gray-100">
-                        <Link to="/">Qiao@www :~$</Link>
+                        <Link to="/">Qiao@www:~$</Link>
                     </div>
                 </div>
                 <div className="flex flex-row items-center">

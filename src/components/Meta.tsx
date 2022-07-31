@@ -45,6 +45,11 @@ export const Meta = ({
             }}
             title={title}
             titleTemplate={defaultTitle ? `${defaultTitle} | %s` : undefined}
+            link={[{
+                type: "image/png",
+                rel: "icon",
+                href: "/images/favicon-32x32.png",
+            }]}
             meta={[
                 {
                     name: `description`,
