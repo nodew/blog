@@ -41,6 +41,10 @@ const config: GatsbyConfig = {
             resolve: `gatsby-plugin-mdx`,
             options: {
                 extensions: [`.md`, `.mdx`],
+                mdxOptions: {
+                    remarkPlugins: [],
+                    rehypePlugins: [],
+                },
                 gatsbyRemarkPlugins: [
                     {
                         resolve: `gatsby-remark-prismjs`,

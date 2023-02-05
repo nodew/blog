@@ -35,7 +35,7 @@ export default ({ data }: TagsPageProps) => {
 export const query = graphql`
     query TagsPage {
         tags: allMdx {
-            group(field: frontmatter___tags) {
+            group(field: { frontmatter: { tags: SELECT } } ) {
                 fieldValue
                 totalCount
             }

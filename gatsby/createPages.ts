@@ -1,6 +1,9 @@
 import _ from "lodash";
 import path from "path";
 
+const postTemplate = path.resolve(`./src/templates/post-template.tsx`);
+const tagTemplate = path.resolve(`./src/templates/tag-template.tsx`);
+
 export const createPages = async ({ graphql, actions, reporter }) => {
     await createPostItemPage({ graphql, actions, reporter });
     await createTaggedListPage({ graphql, actions, reporter });
@@ -12,8 +15,8 @@ const createPostItemPage = async ({ graphql, actions, reporter }) => {
     const result = await graphql(`
         query PostItems {
             allFile(
-                sort: { order: DESC, fields: childMdx___frontmatter___date }
                 filter: { sourceInstanceName: { eq: "posts" } }
+                sort: { childMdx: { frontmatter: { date: DESC } } }
             ) {
                 edges {
                     node {
@@ -22,6 +25,9 @@ const createPostItemPage = async ({ graphql, actions, reporter }) => {
                             frontmatter {
                                 date
                                 slug
+                            }
+                            internal {
+                                contentFilePath
                             }
                         }
                     }
@@ -61,7 +67,7 @@ const createPostItemPage = async ({ graphql, actions, reporter }) => {
 
             createPage({
                 path: `/posts/${slug}`,
-                component: path.resolve(`./src/templates/post-template.tsx`),
+                component: `${postTemplate}?__contentFilePath=${post.internal.contentFilePath}`,
                 context: {
                     id: postId,
                     previousPostId,
@@ -78,7 +84,7 @@ const createTaggedListPage = async ({ graphql, actions, reporter }) => {
     const result = await graphql(`
         query Tags {
             allMdx {
-                group(field: frontmatter___tags) {
+                group(field: { frontmatter: { tags: SELECT } }) {
                     fieldValue
                     totalCount
                 }
@@ -97,7 +103,7 @@ const createTaggedListPage = async ({ graphql, actions, reporter }) => {
     _.each(result.data.allMdx.group, (tag) => {
         createPage({
             path: `/tags/${_.kebabCase(tag.fieldValue)}`,
-            component: path.resolve("./src/templates/tag-template.tsx"),
+            component: tagTemplate,
             context: {
                 tag: tag.fieldValue,
             },

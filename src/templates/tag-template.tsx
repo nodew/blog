@@ -17,7 +17,7 @@ interface TaggedPostsPageProps {
     };
 }
 
-export default ({ data, pageContext }: TaggedPostsPageProps) => {
+const TagTemplate = ({ data, pageContext }: TaggedPostsPageProps) => {
     return (
         <Layout>
             <div className="max-w-5xl mx-auto">
@@ -53,7 +53,7 @@ export const query = graphql`
     query PostsByTag($tag: String) {
         posts: allMdx(
             filter: { frontmatter: { tags: { in: [$tag] } } }
-            sort: { order: DESC, fields: [frontmatter___date] }
+            sort: { frontmatter: { date: DESC } }
         ) {
             nodes {
                 id
@@ -66,3 +66,5 @@ export const query = graphql`
         }
     }
 `;
+
+export default TagTemplate;

@@ -7,7 +7,6 @@ dayjs.extend(localizedFormat);
 
 import { Layout } from "../components/Layout";
 import { Meta } from "../components/Meta";
-import { MDXRenderer } from "gatsby-plugin-mdx";
 
 interface HomePageProps {
     data: GatsbyTypes.HomePageQuery;
@@ -76,7 +75,7 @@ export default ({ data }: HomePageProps) => {
                                         </a>
                                     </div>
                                     <div className="text-gray-600 mt-2 dark:text-gray-400">
-                                        <MDXRenderer>{post!.body}</MDXRenderer>
+                                        {post!.body}
                                     </div>
                                 </li>
                             ))}
@@ -88,42 +87,39 @@ export default ({ data }: HomePageProps) => {
 };
 
 export const query = graphql`
-    query HomePage {
-        posts: allFile(
-            filter: { sourceInstanceName: { eq: "posts" } }
-            sort: { order: DESC, fields: childMdx___frontmatter___date }
-        ) {
-            edges {
-                node {
-                    childMdx {
-                        id
-                        frontmatter {
-                            slug
-                            title
-                            date
-                        }
-                    }
-                }
+  query HomePage {
+    posts: allFile(
+      filter: {sourceInstanceName: {eq: "posts"}}
+      sort: {childMdx: {frontmatter: {date: DESC}}}
+    ) {
+      edges {
+        node {
+          childMdx {
+            id
+            frontmatter {
+              slug
+              title
+              date
             }
+          }
         }
-
-        projects: allFile(
-            filter: {
-                sourceInstanceName: { eq: "projects" }
-                childMdx: { frontmatter: { pinToHomePage: { eq: true } } }
-            }
-            sort: { order: ASC, fields: childMdx___frontmatter___name }
-        ) {
-            nodes {
-                childMdx {
-                    id
-                    body
-                    frontmatter {
-                        name
-                        projectUrl
-                    }
-                }
-            }
-        }
+      }
     }
+
+    projects: allFile(
+      filter: {sourceInstanceName: {eq: "projects"}, childMdx: {frontmatter: {pinToHomePage: {eq: true}}}}
+      sort: {childMdx: {frontmatter: {name: DESC}}}
+    ) {
+      nodes {
+        childMdx {
+          id
+          body
+          frontmatter {
+            name
+            projectUrl
+          }
+        }
+      }
+    }
+  }
 `;
