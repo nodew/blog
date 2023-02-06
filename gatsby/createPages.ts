@@ -15,7 +15,10 @@ const createPostItemPage = async ({ graphql, actions, reporter }) => {
     const result = await graphql(`
         query PostItems {
             allFile(
-                filter: { sourceInstanceName: { eq: "posts" } }
+                filter: {
+                    sourceInstanceName: { eq: "posts" }
+                    childMdx: { id: { ne: null } }
+                }
                 sort: { childMdx: { frontmatter: { date: DESC } } }
             ) {
                 edges {
@@ -59,21 +62,23 @@ const createPostItemPage = async ({ graphql, actions, reporter }) => {
     if (items.length > 0) {
         items.forEach((item: any) => {
             const post = item.node.childMdx;
-            const postId = post.id;
-            const slug = post.frontmatter.slug;
+            if (post !== null) {
+                const postId = post.id;
+                const slug = post.frontmatter.slug;
 
-            const previousPostId = item.previous?.childMdx?.id;
-            const nextPostId = item.next?.childMdx?.id;
+                const previousPostId = item.previous?.childMdx?.id;
+                const nextPostId = item.next?.childMdx?.id;
 
-            createPage({
-                path: `/posts/${slug}`,
-                component: `${postTemplate}?__contentFilePath=${post.internal.contentFilePath}`,
-                context: {
-                    id: postId,
-                    previousPostId,
-                    nextPostId,
-                },
-            });
+                createPage({
+                    path: `/posts/${slug}`,
+                    component: `${postTemplate}?__contentFilePath=${post.internal.contentFilePath}`,
+                    context: {
+                        id: postId,
+                        previousPostId,
+                        nextPostId,
+                    },
+                });
+            }
         });
     }
 };

@@ -28,6 +28,7 @@ const config: GatsbyConfig = {
             options: {
                 name: `posts`,
                 path: `${__dirname}/posts`,
+                ignore: [`**/\.png$`, `**/\.jpg$`, `**/\.jpeg$`, `**/\.gif$`],
             },
         },
         {
@@ -46,6 +47,12 @@ const config: GatsbyConfig = {
                     rehypePlugins: [],
                 },
                 gatsbyRemarkPlugins: [
+                    {
+                        resolve: `gatsby-remark-images`,
+                        options: {
+                            maxWidth: 800
+                        }
+                    },
                     {
                         resolve: `gatsby-remark-prismjs`,
                         options: {

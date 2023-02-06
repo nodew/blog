@@ -89,7 +89,10 @@ export default ({ data }: HomePageProps) => {
 export const query = graphql`
   query HomePage {
     posts: allFile(
-      filter: {sourceInstanceName: {eq: "posts"}}
+      filter: {
+        sourceInstanceName: {eq: "posts"}
+        childMdx: { id: { ne: null } }
+      }
       sort: {childMdx: {frontmatter: {date: DESC}}}
     ) {
       edges {

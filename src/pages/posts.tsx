@@ -47,7 +47,10 @@ export default ({ data }: PostsPageProps) => {
 export const query = graphql`
     query PostsPage {
         posts: allFile(
-            filter: { sourceInstanceName: { eq: "posts" } }
+            filter: {
+                sourceInstanceName: { eq: "posts" }
+                childMdx: { id: { ne: null } }
+            }
             sort: { childMdx: { frontmatter: { date: DESC } } }
         ) {
             edges {
