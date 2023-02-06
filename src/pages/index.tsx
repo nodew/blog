@@ -7,6 +7,7 @@ dayjs.extend(localizedFormat);
 
 import { Layout } from "../components/Layout";
 import { Meta } from "../components/Meta";
+import MdxRenderer from "../components/MdxRenderer";
 
 interface HomePageProps {
     data: GatsbyTypes.HomePageQuery;
@@ -75,7 +76,7 @@ export default ({ data }: HomePageProps) => {
                                         </a>
                                     </div>
                                     <div className="text-gray-600 mt-2 dark:text-gray-400">
-                                        {post!.body}
+                                        <MdxRenderer content={post!.body || ""} />
                                     </div>
                                 </li>
                             ))}
@@ -90,10 +91,10 @@ export const query = graphql`
   query HomePage {
     posts: allFile(
       filter: {
-        sourceInstanceName: {eq: "posts"}
+        sourceInstanceName: { eq: "posts" }
         childMdx: { id: { ne: null } }
       }
-      sort: {childMdx: {frontmatter: {date: DESC}}}
+      sort: { childMdx: { frontmatter: { date: DESC } } }
     ) {
       edges {
         node {
@@ -110,8 +111,11 @@ export const query = graphql`
     }
 
     projects: allFile(
-      filter: {sourceInstanceName: {eq: "projects"}, childMdx: {frontmatter: {pinToHomePage: {eq: true}}}}
-      sort: {childMdx: {frontmatter: {name: DESC}}}
+      filter: {
+        sourceInstanceName: { eq: "projects" }
+        childMdx: { frontmatter: { pinToHomePage: { eq: true } } }
+      }
+      sort: { childMdx: { frontmatter: { name: DESC } } }
     ) {
       nodes {
         childMdx {
