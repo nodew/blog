@@ -88,19 +88,26 @@ const config: GatsbyConfig = {
         `gatsby-plugin-sharp`,
         `gatsby-plugin-postcss`,
         {
-            resolve: `gatsby-plugin-google-analytics`,
+            resolve: `gatsby-plugin-clarity`,
             options: {
-                trackingId: "UA-122703565-1",
-                head: false,
-                anonymize: true,
-                respectDNT: true,
-                exclude: [],
-                pageTransitionDelay: 300,
-                defer: false,
-                sampleRate: 5,
-                siteSpeedSampleRate: 10,
-                cookieDomain: "wangqiao.me",
-                enableWebVitalsTracking: true,
+                clarity_project_id: "fys6rjltq3",
+                enable_on_dev_env: false
+            },
+        },
+        {
+            resolve: `gatsby-plugin-google-gtag`,
+            options: {
+                trackingIds: [
+                    "G-E335734SN7",
+                ],
+                gtagConfig: {
+                    anonymize_ip: true
+                },
+                pluginConfig: {
+                    head: false,
+                    respectDNT: true,
+                    exclude: [],
+                },
             },
         },
     ],
