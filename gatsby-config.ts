@@ -39,6 +39,14 @@ const config: GatsbyConfig = {
             },
         },
         {
+            resolve: `gatsby-source-filesystem`,
+            options: {
+                name: `books`,
+                path: `${__dirname}/books`,
+                ignore: [`**/\.png$`, `**/\.jpg$`, `**/\.jpeg$`, `**/\.gif$`],
+            },
+        },
+        {
             resolve: `gatsby-plugin-mdx`,
             options: {
                 extensions: [`.md`, `.mdx`],

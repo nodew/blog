@@ -10,3 +10,12 @@
     padding: 1em;
     margin: .5em 0;
 }
+
+.main-nav-item a::before {
+    display: block;
+    content: attr(data-text);
+    font-weight: bold;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+}

@@ -2,6 +2,28 @@ import { Link } from "gatsby";
 import React, { useContext } from "react";
 import { ThemeContext } from "./ThemeProvider";
 
+
+
+interface NavItemProps {
+    link: string;
+    name: string;
+    active: boolean;
+}
+
+const NavItem = ({ link, name, active }: NavItemProps) => {
+    return (
+        <li
+            className={`main-nav-item px-8 hover:font-semibold ${
+                active
+                    ? "font-bold hover:font-bold"
+                    : ""
+            }`}
+        >
+            <Link to={link} data-text={name}>{name}</Link>
+        </li>
+    )
+}
+
 export interface HeaderProps {
     activeNavItem?: string;
 }
@@ -26,33 +48,10 @@ export const Header = ({ activeNavItem = "" }: HeaderProps) => {
                 <div className="flex flex-row items-center">
                     <nav className="select-none mt-4 lg:mt-0">
                         <ul className="text-xl text-gray-700 dark:text-gray-200 flex">
-                            <li
-                                className={`w-24 text-center hover:font-semibold ${
-                                    activeNavItem === "home"
-                                        ? "font-bold hover:font-bold"
-                                        : ""
-                                }`}
-                            >
-                                <Link to="/">Home</Link>
-                            </li>
-                            <li
-                                className={`w-24 text-center hover:font-semibold ${
-                                    activeNavItem === "posts"
-                                        ? "font-bold hover:font-bold"
-                                        : ""
-                                }`}
-                            >
-                                <Link to="/posts">Posts</Link>
-                            </li>
-                            <li
-                                className={`w-24 text-center hover:font-semibold ${
-                                    activeNavItem === "about"
-                                        ? "font-bold hover:font-bold"
-                                        : ""
-                                }`}
-                            >
-                                <Link to="/about">About</Link>
-                            </li>
+                            <NavItem name="Home" link="/" active={activeNavItem === "home"} />
+                            <NavItem name="Post" link="/posts" active={activeNavItem === "posts"} />
+                            <NavItem name="Publication" link="/books" active={activeNavItem === "books"} />
+                            <NavItem name="About" link="/about" active={activeNavItem === "about"} />
                         </ul>
                     </nav>
                     <div

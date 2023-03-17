@@ -31,6 +31,8 @@ export const createSchemaCustomization = ({ actions }) => {
             name: String
             projectUrl: String
             pinToHomePage: Boolean
+
+            cover: String
         }
     `);
 };
