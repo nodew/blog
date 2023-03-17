@@ -13,7 +13,7 @@ interface NavItemProps {
 const NavItem = ({ link, name, active }: NavItemProps) => {
     return (
         <li
-            className={`main-nav-item px-8 hover:font-semibold ${
+            className={`main-nav-item px-5 hover:font-semibold ${
                 active
                     ? "font-bold hover:font-bold"
                     : ""
