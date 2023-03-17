@@ -33,6 +33,7 @@ const BookTemplate = ({ data: { mdx }, children }: BookTemplateProps) => {
                                 mdx.frontmatter!.keywords!.join(","),
                         },
                     ]}
+                    image={mdx?.frontmatter?.thumbnail || ""}
                 />
                 <div className="prose xl:prose-xl dark:prose-dark dark:xl:prose-dark-xl max-w-none">
                     <h1 className="mb-0 xl:mb-2">
@@ -52,6 +53,7 @@ export const pageQuery = graphql`
             frontmatter {
                 name
                 slug
+                thumbnail
                 excerpt
                 keywords
             }

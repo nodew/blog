@@ -33,6 +33,7 @@ export const createSchemaCustomization = ({ actions }) => {
             pinToHomePage: Boolean
 
             cover: String
+            thumbnail: String
         }
     `);
 };

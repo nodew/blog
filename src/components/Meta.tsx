@@ -25,6 +25,7 @@ export const Meta = ({
                 site {
                     siteMetadata {
                         title
+                        siteUrl
                         description
                         social {
                             twitter
@@ -37,6 +38,11 @@ export const Meta = ({
 
     const _description = description || site?.siteMetadata?.description || "";
     const defaultTitle = site?.siteMetadata?.title;
+    let thumbnail_url = image;
+    if (!!image && !/^(http|https)/.test(image)) {
+        thumbnail_url = site?.siteMetadata.siteUrl + image;
+    }
+
 
     return (
         <Helmet
@@ -69,7 +75,7 @@ export const Meta = ({
                 },
                 {
                     property: `og:image`,
-                    content: image,
+                    content: thumbnail_url,
                 },
                 {
                     name: `twitter:card`,
