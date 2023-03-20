@@ -39,10 +39,9 @@ export const Meta = ({
     const _description = description || site?.siteMetadata?.description || "";
     const defaultTitle = site?.siteMetadata?.title;
     let thumbnail_url = image;
-    if (!!image && !/^(http|https)/.test(image)) {
-        thumbnail_url = site?.siteMetadata.siteUrl + image;
+    if (!!image && site?.siteMetadata?.siteUrl && !/^(http|https)/.test(image)) {
+        thumbnail_url = site.siteMetadata.siteUrl + image;
     }
-
 
     return (
         <Helmet
