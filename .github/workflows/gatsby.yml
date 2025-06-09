@@ -51,12 +51,15 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+      - name: enable corepack and set yarn version to latest stable
+        run: |
+          corepack enable
+          yarn set version stable
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          # cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache: ''
+          cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
