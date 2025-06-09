@@ -69,5 +69,5 @@
         "prettier": "3.5.3",
         "typescript": "5.8.3"
     },
-    "packageManager": "yarn@3.5.1+sha512.8cd0e31bd60779ef4ca92b855fb3462c7ec35ce8b345752b7349a68239776417f46d41d79c8047242d9c93b48a1516f64c7444ebe747d9a02bf26868e6fa1f2b"
+    "packageManager": "yarn@4.3.1+sha512.af78262d7d125afbfeed740602ace8c5e4405cd7f4735c08feb327286b2fdb2390fbca01589bfd1f50b1240548b74806767f5a063c94b67e431aabd0d86f7774"
 }
