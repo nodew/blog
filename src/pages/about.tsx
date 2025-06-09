@@ -28,7 +28,7 @@ export default ({ data }: AboutPageProps) => {
                         in micro-electronics. Currently I'm working for
                         Microsoft. I'm experienced in NodeJS/JavaScript and .NET
                         development and I’ve been working in the field of web
-                        development for 6 years.
+                        development for 10 years.
                     </p>
 
                     <p>My favorite languages are Haskell, C# and TypeScript.</p>
