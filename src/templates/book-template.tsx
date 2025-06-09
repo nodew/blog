@@ -35,7 +35,7 @@ const BookTemplate = ({ data: { mdx }, children }: BookTemplateProps) => {
                     ]}
                     image={mdx?.frontmatter?.thumbnail || ""}
                 />
-                <div className="prose xl:prose-xl dark:prose-dark dark:xl:prose-dark-xl max-w-none">
+                <div className="prose xl:prose-xl dark:prose-invert dark:xl:prose-dark-xl max-w-none">
                     <h1 className="mb-0 xl:mb-2">
                         {mdx.frontmatter!.name}
                     </h1>

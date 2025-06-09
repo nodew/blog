@@ -20,7 +20,7 @@ export default ({ data }: AboutPageProps) => {
                 <h1 className="text-5xl font-bold block text-center mb-14">
                     About me
                 </h1>
-                <div className="prose xl:prose-xl dark:prose-dark dark:xl:prose-dark-xl max-w-none">
+                <div className="prose xl:prose-xl dark:prose-invert dark:xl:prose-dark-xl max-w-none">
                     <p>I'm Qiao Wang, a software developer living in China.</p>
 
                     <p>

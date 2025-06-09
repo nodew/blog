@@ -17,7 +17,7 @@ export default ({ data }: TagsPageProps) => {
                 <h1 className="text-3xl font-bold block mb-8 mt-12">Tags</h1>
                 <ul>
                     {data.tags.group.map((tag: any) => (
-                        <li className="float-left mr-6 my-2 font-semibold">
+                        <li key={tag} className="float-left mr-6 my-2 font-semibold">
                             <Link
                                 className="text-blue-400 hover:text-blue-800"
                                 to={`/tags/${_.kebabCase(tag.fieldValue)}`}

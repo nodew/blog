@@ -1,24 +1,24 @@
 import React from "react";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 import { useStaticQuery, graphql } from "gatsby";
 
 export interface MetaProps {
     title: string;
     description?: string;
     lang?: string;
-    extras?: any[];
+    extras?: Array<{ name?: string; property?: string; content: string }>;
     image?: string;
     type?: "website" | "article";
 }
 
-export const Meta = ({
+export const Meta: React.FC<MetaProps> = ({
     title,
     description = "",
     lang = "en",
     extras = [],
     type = "website",
     image = "",
-}: MetaProps) => {
+}) => {
     const { site } = useStaticQuery<GatsbyTypes.SiteMetaQuery>(
         graphql`
             query SiteMeta {
@@ -38,61 +38,37 @@ export const Meta = ({
 
     const _description = description || site?.siteMetadata?.description || "";
     const defaultTitle = site?.siteMetadata?.title;
-    let thumbnail_url = image;
-    if (!!image && site?.siteMetadata?.siteUrl && !/^(http|https)/.test(image)) {
-        thumbnail_url = site.siteMetadata.siteUrl + image;
-    }
+    const thumbnail_url = image && site?.siteMetadata?.siteUrl && !/^(http|https)/.test(image)
+        ? `${site.siteMetadata.siteUrl}${image}`
+        : image;
 
     return (
-        <Helmet
-            htmlAttributes={{
-                lang,
-            }}
-            title={title}
-            titleTemplate={defaultTitle ? `${defaultTitle} | %s` : undefined}
-            link={[{
-                type: "image/png",
-                rel: "icon",
-                href: "/images/favicon-32x32.png",
-            }]}
-            meta={[
-                {
-                    name: `description`,
-                    content: _description,
-                },
-                {
-                    property: `og:title`,
-                    content: title,
-                },
-                {
-                    property: `og:description`,
-                    content: _description,
-                },
-                {
-                    property: `og:type`,
-                    content: type,
-                },
-                {
-                    property: `og:image`,
-                    content: thumbnail_url,
-                },
-                {
-                    name: `twitter:card`,
-                    content: `summary`,
-                },
-                {
-                    name: `twitter:creator`,
-                    content: site?.siteMetadata?.social?.twitter || ``,
-                },
-                {
-                    name: `twitter:title`,
-                    content: title,
-                },
-                {
-                    name: `twitter:description`,
-                    content: _description,
-                },
-            ].concat(extras)}
-        />
+        <Helmet>
+            {/* Document metadata */}
+            <html lang={lang} />
+            <title>{title}</title>
+            {defaultTitle && <meta name="titleTemplate" content={`${defaultTitle} | %s`} />}
+            <meta name="description" content={_description} />
+
+            {/* Favicon */}
+            <link rel="icon" type="image/png" href="/images/favicon-32x32.png" />
+
+            {/* Open Graph metadata */}
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={_description} />
+            <meta property="og:type" content={type} />
+            {thumbnail_url && <meta property="og:image" content={thumbnail_url} />}
+
+            {/* Twitter Card metadata */}
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:creator" content={site?.siteMetadata?.social?.twitter || ""} />
+            <meta name="twitter:title" content={title} />
+            <meta name="twitter:description" content={_description} />
+
+            {/* Additional meta tags */}
+            {extras.map((extra, index) => (
+                <meta key={index} {...extra} />
+            ))}
+        </Helmet>
     );
 };

@@ -406,26 +406,26 @@ ActivityPub 在提供一种标准化的方式，将社交网络从孤立、集�
 
 ## 脚注：
 
-<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> 当然，没有什么能阻止当前的社交网络孤岛采用 ActivityPub，只要他们愿意打破用户的藩篱。</div>
+<div className="footdef"><sup><a id="fn.1" name="fn.1" className="footnum" href="#fnr.1">1</a></sup> 当然，没有什么能阻止当前的社交网络孤岛采用 ActivityPub，只要他们愿意打破用户的藩篱。</div>
 
-<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> 细心的读者可能会注意到，电子邮件不再像以前那样是一个分散的系统。考虑到这一教训，仅有协议是无法构建分布式网络的。社区必须构建和维护数量充足的节点，避免让少数大型提供商控制联合网络的空间。</div>
+<div className="footdef"><sup><a id="fn.2" name="fn.2" className="footnum" href="#fnr.2">2</a></sup> 细心的读者可能会注意到，电子邮件不再像以前那样是一个分散的系统。考虑到这一教训，仅有协议是无法构建分布式网络的。社区必须构建和维护数量充足的节点，避免让少数大型提供商控制联合网络的空间。</div>
 
-<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> 值得花一些时间来讨论“中心式”、“分布式”和“去中心化”的含义。\
+<div className="footdef"><sup><a id="fn.3" name="fn.3" className="footnum" href="#fnr.3">3</a></sup> 值得花一些时间来讨论“中心式”、“分布式”和“去中心化”的含义。\
 ![Centralized, Decentralized, and Distributed drawings, from 'On Distributed Communications, part 1' by Paul Baran, 1964](./images/centralized_decentralized_distributed.png) \
 在上图中，我们看到了 Paul Baran 在 1964 年关于该主题的论文中的图像，从这些形状中，我们可以看到我们所指的各种形状：社交孤岛类似于轮辐一样的中心化模型，客户端-服务器联合社交网络类似于树状去中心化模型，而 P2P 网络类似于网状分布式模型。自从写那篇论文以来，一直有显著的词汇漂移（也许是因为英语是一种去中心化的/分布式的语言），而且<a href="https://medium.com/@VitalikButerin/the-meaning-of-decentralization-a0c92b76a274">澄清这些术语的含义</a>可能很难。（在<a href="https://ethereum.stackexchange.com/a/7813">以太坊堆栈交易所上的一个热门帖子</a>中，出现了一个与 Baran 的图几乎完全相同的图，但去中心化和分布式标签颠倒了！）本文的目标实际上是找出能够最大程度地提高可靠性、安全性和用户自主性的系统，而所讨论的一些方法（如公钥加密）可以同时提高这两个方面。尽管如此，当使用“去中心化”和“分布式”这两个词时，要找出它们的含义，有时要看看 Baren 的图片比文字更具描述性。</div>
 
-<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> Alyssa 可能不会像这里描述的那样直接看到 JSON-LD 对象，但作者认为，一些叙述上下文仍然有助于解释 UI 无法描述的协议。</div>
+<div className="footdef"><sup><a id="fn.4" name="fn.4" className="footnum" href="#fnr.4">4</a></sup> Alyssa 可能不会像这里描述的那样直接看到 JSON-LD 对象，但作者认为，一些叙述上下文仍然有助于解释 UI 无法描述的协议。</div>
 
-<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> `Announce` 基本上`分享（Share）`在 ActivityStreams 中。本文作者不对术语负责。</div>
+<div className="footdef"><sup><a id="fn.5" name="fn.5" className="footnum" href="#fnr.5">5</a></sup> `Announce` 基本上`分享（Share）`在 ActivityStreams 中。本文作者不对术语负责。</div>
 
-<div class="footdef"><sup><a id="fn.6" name="fn.6" class="footnum" href="#fnr.6">6</a></sup> 在 ActivityPub 中， `Collection` 对象可用于包含对象集。该系统的用户可以在公共或私人可读的集合中管理参与者集合，这些集合可用于分布式对象的寻址（类似于 Google+ 的 Circles 或 Diaspora 的 Aspects）。的确，连参与者的 `followers` 都是 `Collection` 这样的！</div>
+<div className="footdef"><sup><a id="fn.6" name="fn.6" className="footnum" href="#fnr.6">6</a></sup> 在 ActivityPub 中， `Collection` 对象可用于包含对象集。该系统的用户可以在公共或私人可读的集合中管理参与者集合，这些集合可用于分布式对象的寻址（类似于 Google+ 的 Circles 或 Diaspora 的 Aspects）。的确，连参与者的 `followers` 都是 `Collection` 这样的！</div>
 
-<div class="footdef"><sup><a id="fn.7" name="fn.7" class="footnum" href="#fnr.7">7</a></sup> 在存储对象上的签名时，需要做出几个决定，这些对象本身引用了可能发生变化的其他签名对象，这是<a href="https://github.com/w3c-dvcg/ld-signatures/issues/7">目前公开讨论</a>的主题。这可能会激发更多关于仅追加系统和内容寻址存储的工作。在有突变倾向的环境中操作的现有实现必须决定是让引用突变对象的签名失败（在每个父对象上递归地包括这样的对象），还是采用由所见修订存储的对象的某种内容寻址。后两个选项可能会对高度相关的最初设计时没有考虑签名的系统。</div>
+<div className="footdef"><sup><a id="fn.7" name="fn.7" className="footnum" href="#fnr.7">7</a></sup> 在存储对象上的签名时，需要做出几个决定，这些对象本身引用了可能发生变化的其他签名对象，这是<a href="https://github.com/w3c-dvcg/ld-signatures/issues/7">目前公开讨论</a>的主题。这可能会激发更多关于仅追加系统和内容寻址存储的工作。在有突变倾向的环境中操作的现有实现必须决定是让引用突变对象的签名失败（在每个父对象上递归地包括这样的对象），还是采用由所见修订存储的对象的某种内容寻址。后两个选项可能会对高度相关的最初设计时没有考虑签名的系统。</div>
 
-<div class="footdef"><sup><a id="fn.8" name="fn.8" class="footnum" href="#fnr.8">8</a></sup> <a href="https://ring.cx/">GNU Ring</a> 是 P2P 社交网络系统的一个有趣的例子，其中用户的身份实际上是他们的指纹。虽然不是第一个有这个概念的系统，但它的运行非常令人愉快（而且界面本身也很美观）。建立你的好友名单相当于从字面上建立你的信任网。</div>
+<div className="footdef"><sup><a id="fn.8" name="fn.8" className="footnum" href="#fnr.8">8</a></sup> <a href="https://ring.cx/">GNU Ring</a> 是 P2P 社交网络系统的一个有趣的例子，其中用户的身份实际上是他们的指纹。虽然不是第一个有这个概念的系统，但它的运行非常令人愉快（而且界面本身也很美观）。建立你的好友名单相当于从字面上建立你的信任网。</div>
 
-<div class="footdef"><sup><a id="fn.9" name="fn.9" class="footnum" href="#fnr.9">9</a></sup> 有数量惊人的<a href="http://www.unicode.org/Public/security/latest/confusables.txt">Unicode 黑客</a>，即使是最细心的技术用户也会上当受骗。</div>
+<div className="footdef"><sup><a id="fn.9" name="fn.9" className="footnum" href="#fnr.9">9</a></sup> 有数量惊人的<a href="http://www.unicode.org/Public/security/latest/confusables.txt">Unicode 黑客</a>，即使是最细心的技术用户也会上当受骗。</div>
 
-<div class="footdef"><sup><a id="fn.10" name="fn.10" class="footnum" href="#fnr.10">10</a></sup> <code>https：//securityns.example/</code> 是一个虚构的 JSON-LD 上下文，它仅用作术语<code>EncryptedEnvelope</code>和 <code>EncryptedMessage</code> 的占位符。也许在将来，出现在该文档中的这些术语（也许有更好的名称）会出现在其他上下文/名称空间之中。</div>
+<div className="footdef"><sup><a id="fn.10" name="fn.10" className="footnum" href="#fnr.10">10</a></sup> <code>https：//securityns.example/</code> 是一个虚构的 JSON-LD 上下文，它仅用作术语<code>EncryptedEnvelope</code>和 <code>EncryptedMessage</code> 的占位符。也许在将来，出现在该文档中的这些术语（也许有更好的名称）会出现在其他上下文/名称空间之中。</div>
 
-<div class="footdef"><sup><a id="fn.11" name="fn.11" class="footnum" href="#fnr.11">11</a></sup> 这与 PGP 包装的电子邮件的工作方式并无不同。接收 PGP 加密的电子邮件意味着网络邮件界面将无法搜索你的邮件。然而，这并不意味着搜索是不可能的；一些程序，如 <a href="http://www.djcbsoftware.nl/code/mu">MU</a> / <a href="https://www.djcbsoftware.nl/code/mu/MU4E.html" >mu4e</a> 可以在用户的本地计算机上的本地索引加密电子邮件并提供此类搜索接口。</div>
+<div className="footdef"><sup><a id="fn.11" name="fn.11" className="footnum" href="#fnr.11">11</a></sup> 这与 PGP 包装的电子邮件的工作方式并无不同。接收 PGP 加密的电子邮件意味着网络邮件界面将无法搜索你的邮件。然而，这并不意味着搜索是不可能的；一些程序，如 <a href="http://www.djcbsoftware.nl/code/mu">MU</a> / <a href="https://www.djcbsoftware.nl/code/mu/MU4E.html" >mu4e</a> 可以在用户的本地计算机上的本地索引加密电子邮件并提供此类搜索接口。</div>
